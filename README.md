@@ -32,6 +32,17 @@ Built with **Swift, SwiftUI, and AppKit**. No account required. Your notes and i
 
 > The current app interface is in Chinese. This English README makes the project easier to discover; it does not indicate an English app localization.
 
+## At a glance
+
+![String Notes in use: create a note, pull it down to write, hang it back, and save on close. Screenshot of the Chinese app interface.](Assets/screenshots/user-guide.zh-CN.png)
+
+A real screenshot with four quick-start notes. From left to right:
+
+1. **Catch a thought** — click **＋**, write, and let autosave take care of it.
+2. **Pull it down** — drag a note downward to open its own window, or simply click it.
+3. **Hang it back** — drag the window's empty title area to the string; neighboring cards make room before you release.
+4. **Close with confidence** — pin a note to keep it on top, press **Esc** to save and close, or archive it when done.
+
 ## A place for the little things
 
 | | What String Notes offers |
