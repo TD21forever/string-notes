@@ -34,7 +34,7 @@ Built with **Swift, SwiftUI, and AppKit**. No account required. Your notes and i
 
 ## At a glance
 
-![String Notes in use: create a note, pull it down to write, hang it back, and save on close. Screenshot of the Chinese app interface.](Assets/screenshots/user-guide.zh-CN.png)
+![String Notes in use: create a note, pull it down to write, hang it back, and save on close. Screenshot of the Chinese app interface.](Assets/screenshots/user-guide.zh-CN.jpg)
 
 A real screenshot with four quick-start notes. From left to right:
 

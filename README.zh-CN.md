@@ -32,7 +32,7 @@
 
 ## 一图上手
 
-![绳上便笺真实使用界面：随手记、取下来写、挂回去、放心关](Assets/screenshots/user-guide.zh-CN.png)
+![绳上便笺真实使用界面：随手记、取下来写、挂回去、放心关](Assets/screenshots/user-guide.zh-CN.jpg)
 
 从左到右，四步把眼前的小事安顿好：
 
