@@ -145,7 +145,7 @@ struct SettingsView: View {
     }
     private var data: some View {
         VStack(spacing: 22) {
-            SettingsGroup(title: "本地数据", caption: "备份包含文字、图片、归档、草稿和回收站。导入时合并新增便笺，同一张便笺保留本机版本。") {
+            SettingsGroup(title: "本地数据", caption: "备份包含文字、图片、归档及恢复记录。导入时合并新增便笺，同一张便笺保留本机版本。") {
                 SettingRow(title: "完整备份") { Button("导出…", action: export) }
                 Divider().padding(.leading, 14)
                 SettingRow(title: "从备份恢复") { Button("导入…", action: importBackup) }
@@ -156,7 +156,7 @@ struct SettingsView: View {
             SettingsGroup(title: "关于") {
                 HStack(spacing: 14) {
                     Image(nsImage: Brand.appIcon(size: 48)).frame(width: 48, height: 48)
-                    VStack(alignment: .leading, spacing: 5) { Text("绳上便笺").font(.headline); Text("版本 0.10.0 · 原生 macOS 应用").font(.caption).foregroundStyle(.secondary) }
+                    VStack(alignment: .leading, spacing: 5) { Text("绳上便笺").font(.headline); Text("版本 0.10.2 · 原生 macOS 应用").font(.caption).foregroundStyle(.secondary) }
                     Spacer()
                 }.padding(16)
             }

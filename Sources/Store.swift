@@ -31,6 +31,12 @@ final class Store: ObservableObject {
     var notes: [Memo] { book.notes }
     var active: [Memo] { notes.filter { !$0.done } }
     var drafts: [Memo] { book.drafts }
+    // Recovery drafts remain intact until opening the note successfully saves them.
+    var libraryNotes: [Memo] {
+        let recovered = Dictionary(book.drafts.map { ($0.id, $0) }, uniquingKeysWith: { _, latest in latest })
+        let ids = Set(notes.map(\.id))
+        return notes.map { recovered[$0.id] ?? $0 } + drafts.filter { !ids.contains($0.id) }
+    }
     let file: URL
     private var blocked = false
     private var previousOrder: [Memo]?

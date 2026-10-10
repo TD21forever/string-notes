@@ -147,6 +147,16 @@ check(NoteDocument.preferredWidth(fitted) == 0 && abs(fitted.attachmentCell!.cel
 check(abs(sizedAttachment.attachmentCell!.cellSize().height / sizedAttachment.attachmentCell!.cellSize().width - 0.5) < 0.01, "image resize preserves aspect ratio")
 
 let windowStore = Store(folder: root.appendingPathComponent("windows"), seedWelcome: false)
+let recoveryStore = Store(folder: root.appendingPathComponent("recovery-list"), seedWelcome: false)
+let savedRecovery = Memo(text: "original")
+_ = recoveryStore.put(savedRecovery)
+var pendingRecovery = savedRecovery; pendingRecovery.text = "recovered changes"
+_ = recoveryStore.draft(pendingRecovery)
+let newRecovery = Memo(text: "recovered new note")
+_ = recoveryStore.draft(newRecovery)
+check(recoveryStore.libraryNotes.count == 2 && recoveryStore.libraryNotes.first?.text == "recovered changes", "library merges recovery without duplicate IDs")
+check(recoveryStore.notes.first?.text == "original" && recoveryStore.drafts.count == 2, "listing recovery preserves original and draft data")
+check(recoveryStore.autoSave(pendingRecovery) && recoveryStore.libraryNotes.count == 2, "saving recovery clears draft without hiding note")
 let hangingStore = Store(folder: root.appendingPathComponent("hanging"), seedWelcome: false)
 let hangingA = Memo(text: "挂回 A"), hangingB = Memo(text: "挂回 B"), hangingC = Memo(text: "挂回 C")
 _ = hangingStore.put(hangingA); _ = hangingStore.put(hangingB); _ = hangingStore.put(hangingC)

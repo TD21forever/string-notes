@@ -26,6 +26,8 @@ final class Presentation: ObservableObject {
     @Published var detached: Set<UUID> = []
     @Published var draggedID: UUID?
     @Published var dropX: CGFloat?
+    @Published var dropIndex: Int?
+    @Published var insertingID: UUID?
     var hitRects: [CGRect] = []
 }
 struct HitRects: PreferenceKey {
@@ -93,11 +95,12 @@ struct MemoCard: View {
                     .overlay(RoundedRectangle(cornerRadius: 4).stroke(.white.opacity(0.45), lineWidth: 0.6))
                     .shadow(color: .black.opacity(hover ? 0.23 : 0.16), radius: hover ? 10 : 6, x: 1, y: hover ? 7 : 4)
             }.buttonStyle(TactileButtonStyle()).help("点击编辑便笺").accessibilityHidden(true)
-        }.overlay { CardDragSurface(title: NoteDocument.preview(note), clicked: edit, moved: drag, dropped: drop) }.recordsHitRect()
-            .rotationEffect(.degrees(swing + (index % 2 == 0 ? -1.5 : 1.2)), anchor: .init(x: 0.5, y: 9.5 / 156))
-            .scaleEffect(hover && !motionOff ? 1.02 : 1, anchor: .top)
+        }.overlay { CardDragSurface(title: NoteDocument.preview(note), hovered: { hover = $0 }, clicked: edit, moved: drag, dropped: drop) }.recordsHitRect()
+            .rotationEffect(.degrees(swing + (hover && !motionOff ? 0 : (index % 2 == 0 ? -1.5 : 1.2))), anchor: .init(x: 0.5, y: 9.5 / 156))
+            .scaleEffect(hover && !motionOff ? 1.045 : 1, anchor: .top)
             .animation(motionOff ? nil : .spring(response: 0.25, dampingFraction: 0.82), value: hover)
-            .onHover { hover = $0 }
+            .offset(y: hover && !motionOff ? -4 : 0)
+            .animation(motionOff ? nil : .spring(response: 0.3, dampingFraction: 0.7), value: hover)
             .onChange(of: revealed) { visible in
                 if visible && !motionOff {
                     swing = index % 2 == 0 ? 3 : -3
@@ -112,7 +115,7 @@ struct Board: View {
     let edit: (Memo?) -> Void
     let drag: (UUID, NSPoint?) -> Void
     let drop: (Memo, NSPoint) -> Void
-    private var hanging: [Memo] { store.active.filter { !presentation.detached.contains($0.id) } }
+    private var hanging: [Memo] { store.active.filter { !presentation.detached.contains($0.id) && $0.id != presentation.draggedID && $0.id != presentation.insertingID } }
     @AppStorage("reduceMotion") var reduceMotion = false
     @Environment(\.accessibilityReduceMotion) var systemReduceMotion
     private var motionOff: Bool { reduceMotion || systemReduceMotion }
@@ -121,13 +124,18 @@ struct Board: View {
             ZStack(alignment: .topLeading) {
                 Rope(width: geo.size.width)
                 if let x = presentation.dropX {
-                    Capsule().fill(Color.accentColor).frame(width: 4, height: 80)
-                        .position(x: x, y: 58).allowsHitTesting(false)
-                    Text("松手挂回").font(.system(size: 11)).padding(6)
-                        .background(.regularMaterial, in: Capsule()).position(x: x, y: 110).allowsHitTesting(false)
+                    VStack(spacing: -12) {
+                        Peg().opacity(0.55)
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(.white.opacity(0.08))
+                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(.primary.opacity(0.2), style: StrokeStyle(lineWidth: 1, dash: [4, 5])))
+                            .frame(width: HangingLayout.cardWidth, height: HangingLayout.cardHeight)
+                    }.position(x: x, y: HangingLayout.ropeY(x, geo.size.width) - 9.5 + 78)
+                        .allowsHitTesting(false)
                 }
                 ForEach(Array(hanging.enumerated()), id: \.element.id) { i, note in
-                    let x = HangingLayout.x(i, count: hanging.count, width: geo.size.width, scroll: presentation.scroll)
+                    let slot = i + ((presentation.dropIndex.map { i >= $0 } ?? false) ? 1 : 0)
+                    let x = HangingLayout.x(slot, count: hanging.count + (presentation.dropIndex == nil ? 0 : 1), width: geo.size.width, scroll: presentation.scroll)
                     MemoCard(note: note, index: i, revealed: presentation.revealed, edit: { edit(note) }, drag: { drag(note.id, $0) }, drop: { drop(note, $0) })
                         .opacity(presentation.draggedID == note.id ? 0.25 : 1)
                         .transition(motionOff ? .identity : .asymmetric(
@@ -136,7 +144,8 @@ struct Board: View {
                         .position(x: x, y: HangingLayout.ropeY(x, geo.size.width) - 9.5 + 78)
                         .opacity(min(1, max(0, min(x - 25, geo.size.width - x - 25) / 65)))
                 }
-                let plusX = HangingLayout.x(hanging.count, count: hanging.count, width: geo.size.width, scroll: presentation.scroll) - 45
+                let visibleSlots = hanging.count + (presentation.dropIndex == nil ? 0 : 1)
+                let plusX = HangingLayout.x(visibleSlots, count: visibleSlots, width: geo.size.width, scroll: presentation.scroll) - 45
                 Button { edit(nil) } label: {
                     Image(systemName: "plus").font(.system(size: 13, weight: .medium)).foregroundStyle(.primary)
                         .frame(width: 28, height: 28).background(.regularMaterial, in: Circle())
@@ -144,8 +153,8 @@ struct Board: View {
                         .shadow(color: .black.opacity(0.12), radius: 3, y: 2)
                 }.buttonStyle(TactileButtonStyle()).help("写一张便笺").accessibilityLabel("写一张便笺")
                     .recordsHitRect().position(x: plusX, y: HangingLayout.ropeY(plusX, geo.size.width) + 22)
-                if hanging.isEmpty {
-                    Text(store.drafts.isEmpty ? "写一张，把念头挂起来" : "还有草稿，点 ＋ 接着写").font(.system(size: 12)).padding(.horizontal, 12).padding(.vertical, 7)
+                if hanging.isEmpty && presentation.dropIndex == nil {
+                    Text("写一张，把念头挂起来").font(.system(size: 12)).padding(.horizontal, 12).padding(.vertical, 7)
                         .background(.regularMaterial, in: Capsule()).position(x: geo.size.width / 2, y: 102)
                 }
                 if !store.error.isEmpty {
@@ -153,12 +162,14 @@ struct Board: View {
                 }
             }.coordinateSpace(name: "line")
                 .onChange(of: hanging.map(\.id)) { _ in
+                    guard presentation.draggedID == nil, presentation.insertingID == nil else { return }
                     presentation.scroll = min(presentation.scroll, HangingLayout.maxScroll(count: hanging.count, width: geo.size.width))
                 }
                 .onPreferenceChange(HitRects.self) { presentation.hitRects = $0 }
                 .offset(y: presentation.revealed ? 0 : -HangingLayout.height - 15)
                 .animation(motionOff ? nil : presentation.revealed ? .spring(response: 0.42, dampingFraction: 0.82) : .easeIn(duration: 0.22), value: presentation.revealed)
                 .animation(motionOff ? nil : .spring(response: 0.32, dampingFraction: 0.86), value: hanging.map(\.id))
+                .animation(motionOff ? nil : .spring(response: 0.28, dampingFraction: 0.86), value: presentation.dropIndex)
         }
     }
 }
@@ -370,7 +381,7 @@ struct Editor: View {
                     }
                     Divider()
                     Button(session.note.done ? "挂回绳上" : "归档便笺") { session.note.done.toggle(); save(session.note) }
-                    if store.notes.contains(where: { $0.id == session.note.id }) { Button("移到回收站", action: remove) }
+                    if store.notes.contains(where: { $0.id == session.note.id }) { Button("删除便笺", action: remove) }
                 } label: { NoteToolbarIcon(name: "ellipsis") }.menuStyle(.borderlessButton).menuIndicator(.hidden).frame(width: 36, height: 36).accessibilityLabel("便笺选项")
                 Button(action: close) { NoteToolbarIcon(name: "xmark") }.help("保存并关闭 · Esc").accessibilityLabel("保存并关闭")
             }.buttonStyle(.plain).font(.system(size: 12)).foregroundStyle(.black.opacity(0.6))
@@ -400,10 +411,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var timer: Timer?
     var outsideSince: Date?
     var enteredPanel = false
-    var movingEditor: UUID?
     var cardDragging = false
     var cardGhost: NSPanel?
     func applicationDidFinishLaunching(_ notification: Notification) {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleWindowDrag(_:)), name: .noteWindowDrag, object: nil)
         NSApp.setActivationPolicy(.accessory)
         let mainMenu = NSMenu()
         let appItem = NSMenuItem(); let appMenu = NSMenu()
@@ -518,15 +529,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
     func trackPointer() {
         let mouse = NSEvent.mouseLocation
-        if let id = movingEditor {
-            if NSEvent.pressedMouseButtons == 0 {
-                movingEditor = nil
-                if let target = ropeTarget(mouse, excluding: id), let entry = editors[id], entry.session.flush(store), store.place(id, before: target.before) {
-                    finishEditor(id)
-                }
-                presentation.dropX = nil
-            } else { updateDropIndicator(mouse, excluding: id) }
-        }
         if cardDragging { return }
         let point = panel.convertPoint(fromScreen: mouse)
         let flipped = CGPoint(x: point.x, y: panel.frame.height - point.y)
@@ -556,23 +558,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
     }
     // The rope is a temporary shelf: closing a detached window returns its note to it.
-    func ropeTarget(_ point: NSPoint, excluding id: UUID) -> (before: UUID?, x: CGFloat)? {
+    func ropeTarget(_ point: NSPoint, excluding id: UUID) -> (before: UUID?, x: CGFloat, index: Int)? {
         guard presentation.revealed, point.x >= panel.frame.minX, point.x <= panel.frame.maxX,
               point.y <= panel.frame.maxY + 8, point.y >= panel.frame.maxY - 105 else { return nil }
         let notes = store.active.filter { !presentation.detached.contains($0.id) && $0.id != id }
         let localX = point.x - panel.frame.minX
-        let index = notes.indices.first { localX < HangingLayout.x($0, count: notes.count, width: panel.frame.width, scroll: presentation.scroll) } ?? notes.count
-        let x = HangingLayout.x(index, count: notes.count, width: panel.frame.width, scroll: presentation.scroll) - HangingLayout.step / 2
-        return (index < notes.count ? notes[index].id : nil, min(panel.frame.width - 16, max(16, x)))
+        let first = HangingLayout.x(0, count: notes.count + 1, width: panel.frame.width, scroll: presentation.scroll)
+        let index = max(0, min(notes.count, Int(((localX - first) / HangingLayout.step).rounded())))
+        let x = HangingLayout.x(index, count: notes.count + 1, width: panel.frame.width, scroll: presentation.scroll)
+        return (index < notes.count ? notes[index].id : nil, x, index)
+    }
+    func clearDropIndicator() {
+        presentation.dropX = nil; presentation.dropIndex = nil; presentation.insertingID = nil
     }
     func updateDropIndicator(_ point: NSPoint, excluding id: UUID) {
-        presentation.dropX = ropeTarget(point, excluding: id)?.x
+        guard let target = ropeTarget(point, excluding: id) else { clearDropIndicator(); return }
+        presentation.insertingID = id
+        presentation.dropIndex = target.index
+        presentation.dropX = target.x
     }
     func trackCard(_ id: UUID, point: NSPoint?) {
         cardDragging = point != nil
         presentation.draggedID = point == nil ? nil : id
         guard let point = point else {
-            presentation.dropX = nil
+            clearDropIndicator()
             cardGhost?.orderOut(nil); cardGhost = nil
             return
         }
@@ -599,19 +608,33 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             presentation.detached.insert(note.id)
             let screen = NSScreen.screens.first { $0.frame.contains(point) } ?? panel.screen
             let visible = screen?.visibleFrame ?? panel.frame
+            // Keep the toolbar clear of the transparent rope panel's window bounds.
+            let topLimit = screen == panel.screen ? panel.frame.minY - 8 : visible.maxY
             entry.window.setFrameOrigin(NSPoint(
                 x: max(visible.minX, min(point.x - entry.window.frame.width / 2, visible.maxX - entry.window.frame.width)),
-                y: max(visible.minY, min(point.y - entry.window.frame.height + 22, visible.maxY - entry.window.frame.height))))
+                y: max(visible.minY, min(point.y - entry.window.frame.height + 22, topLimit - entry.window.frame.height))))
         }
     }
-    func windowDidMove(_ notification: Notification) {
-        guard NSEvent.pressedMouseButtons & 1 != 0, let window = notification.object as? NSWindow,
-              let id = editors.first(where: { $0.value.window === window })?.key else { return }
-        movingEditor = id
-        let mouse = NSEvent.mouseLocation
-        if let screen = NSScreen.screens.first(where: { $0.frame.contains(mouse) }), screen != panel.screen { show() }
-        panel.orderFrontRegardless()
-        updateDropIndicator(mouse, excluding: id)
+    @objc func handleWindowDrag(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow,
+              let id = editors.first(where: { $0.value.window === window })?.key,
+              let point = notification.userInfo?["point"] as? NSPoint else { return }
+        if notification.userInfo?["ended"] as? Bool == true {
+            defer { clearDropIndicator() }
+            guard let target = ropeTarget(point, excluding: id), let entry = editors[id] else { return }
+            entry.session.note.done = false
+            if entry.session.flush(store), !store.notes.contains(where: { $0.id == id }) || store.place(id, before: target.before) {
+                // Close after mouse tracking has returned to AppKit's event loop.
+                DispatchQueue.main.async { [weak self] in self?.finishEditor(id) }
+            }
+        } else {
+            if let screen = NSScreen.screens.first(where: { $0.frame.contains(point) }), screen != panel.screen {
+                panel.setFrame(NSRect(x: screen.visibleFrame.minX, y: screen.visibleFrame.maxY - HangingLayout.height, width: screen.visibleFrame.width, height: HangingLayout.height), display: true)
+            }
+            presentation.revealed = true
+            panel.orderFrontRegardless()
+            updateDropIndicator(point, excluding: id)
+        }
     }
     func openEditor(_ memo: Memo?) {
         if let id = memo?.id, let entry = editors[id] {
@@ -623,7 +646,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         else { note = store.drafts.first(where: { draft in editors[draft.id] == nil && !store.notes.contains(where: {$0.id == draft.id}) }) ?? Memo(text: "", color: max(0, min(3, UserDefaults.standard.integer(forKey: "defaultColor"))), staysOnTop: UserDefaults.standard.bool(forKey: "defaultPinned")) }
         let session = EditSession(note)
         let win = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 400, height: 360), styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
-        win.titleVisibility = .hidden; win.titlebarAppearsTransparent = true; win.isMovableByWindowBackground = true
+        win.titleVisibility = .hidden; win.titlebarAppearsTransparent = true; win.isMovableByWindowBackground = false
         win.standardWindowButton(.closeButton)?.isHidden = true; win.standardWindowButton(.miniaturizeButton)?.isHidden = true; win.standardWindowButton(.zoomButton)?.isHidden = true
         win.minSize = NSSize(width: 280, height: 220)
         win.setFrameAutosaveName("note-" + note.id.uuidString)
@@ -638,7 +661,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         if let screen = panel.screen {
             let index = store.active.firstIndex(where: {$0.id == note.id}) ?? (store.active.count + editors.values.filter { $0.session.note.text.isEmpty }.count - 1)
             let x = panel.frame.minX + HangingLayout.x(index, count: store.active.count, width: panel.frame.width, scroll: presentation.scroll)
-            win.setFrameOrigin(NSPoint(x: min(screen.visibleFrame.maxX - win.frame.width - 16, max(screen.visibleFrame.minX + 16, x - win.frame.width / 2)), y: max(screen.visibleFrame.minY + 16, panel.frame.minY - win.frame.height + 30)))
+            win.setFrameOrigin(NSPoint(x: min(screen.visibleFrame.maxX - win.frame.width - 16, max(screen.visibleFrame.minX + 16, x - win.frame.width / 2)), y: max(screen.visibleFrame.minY + 16, panel.frame.minY - win.frame.height - 8)))
         } else { win.center() }
         win.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true)
         DispatchQueue.main.async { [weak win] in

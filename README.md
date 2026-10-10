@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.10.0"><img src="https://img.shields.io/badge/version-0.10.0%20preview-e5b85b" alt="0.10.0 preview"></a>
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.10.2"><img src="https://img.shields.io/badge/version-0.10.2%20preview-e5b85b" alt="0.10.2 preview"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13+ build target">
   <img src="https://img.shields.io/badge/Apple%20Silicon-arm64-555555" alt="Apple Silicon">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
@@ -36,11 +36,11 @@ Built with **Swift, SwiftUI, and AppKit**. No account required. Your notes and i
 
 | | What String Notes offers |
 | --- | --- |
-| **Keep it in sight** | Colorful notes on a transparent string. Drag clips to reorder them; empty areas of the overlay let clicks pass through to the app underneath. |
+| **Keep it in sight** | Colorful notes on a transparent string. Drag a note or clip to reorder it, pull it down to open a window, then drag the window back to hang it up. Empty overlay areas let clicks pass through. |
 | **Catch a thought** | Open notes from the menu bar or a global shortcut. Changes save automatically, with multiple note windows and individual always-on-top controls. |
 | **Make yourself at home** | Native text editing, find, undo and redo, adjustable fonts and sizes, and common Markdown formatting. |
 | **Add more than words** | Paste or insert images. Drag their corner handles to resize them; each image remembers its own size. |
-| **Put things away** | Search the note library, archive finished notes, and recover deleted notes from the trash. |
+| **Put things away** | Search a simpler library with just Notes and Archive. Archive finished notes and hang them back whenever you need them. |
 | **Set your own rhythm** | Customize global shortcuts, turn off hover-to-reveal, reduce motion, and export a complete backup whenever you need one. |
 
 ## Install
@@ -55,7 +55,7 @@ brew install --cask TD21forever/tap/string-notes
 
 ### Direct download
 
-Download `StringNotes-0.10.0-arm64.zip` from the [v0.10.0 release page](https://github.com/TD21forever/string-notes/releases/tag/v0.10.0), unzip it, and move **绳上便笺.app** to Applications. Open it to get started.
+Download `StringNotes-0.10.2-arm64.zip` from the [v0.10.2 release page](https://github.com/TD21forever/string-notes/releases/tag/v0.10.2), unzip it, and move **绳上便笺.app** to Applications. Open it to get started.
 
 > **Opening the preview for the first time**
 >
@@ -85,7 +85,7 @@ A normal uninstall keeps your local notes. The cask does not define a `zap` acti
 
 1. **Reveal the string.** Click the note icon in the menu bar, or pause your pointer over the menu bar.
 2. **Hang your first note.** Click **＋** beside the string and start writing. Changes save automatically.
-3. **Arrange your thoughts.** Click a note to edit it, drag its clip to change its position, or keep an editor window on top.
+3. **Arrange your thoughts.** Click a note to edit it, or drag it along the string to reorder it. Pull a note down to open a separate window; drag the window’s empty title area back to the string to hang it up. Closing a detached window also returns the note to the string.
 4. **Archive what is done.** Archive a note, then find it in the library (**所有便笺**) whenever you want to read it or hang it back on the string.
 
 Right-click the menu bar icon to open the library, settings (**设置**), or quit the app.
@@ -127,7 +127,7 @@ Task lists are currently formatted text; their checkboxes cannot be clicked to t
 
 ## Your notes and backups
 
-**Notes are stored locally on your Mac. No account is needed, and there is currently no automatic cloud sync.** In settings, choose the complete backup export (**完整备份 → 导出**) to save text, images, archived notes, drafts, and trash together. Export a backup before moving to a new Mac or trying a new version.
+**Notes are stored locally on your Mac. No account is needed, and there is currently no automatic cloud sync.** In settings, choose the complete backup export (**完整备份 → 导出**) to save text, images, archived notes, and retained recovery records together. Export a backup before moving to a new Mac or trying a new version.
 
 Importing a backup merges new notes. When an ID already exists, the local version is kept. **Import does not overwrite existing notes and cannot roll back edits to them.**
 
@@ -144,7 +144,9 @@ Importing a backup merges new notes. When an ID already exists, the local versio
 
 ## Preview status and feedback
 
-This is the **0.10.0 preview**. Isolated tests cover storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
+This is the **0.10.2 preview**. Isolated tests cover storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
+
+The library now has only Notes and Archive. Draft recovery is merged into the note list; there is no separate Drafts or Trash tab. Deleted records remain in local storage and backups, but there is currently no restore action in the UI. Archive notes you may want to revisit.
 
 Automatic cloud sync, automatic version history, in-app updates, and a notarized distribution are not available yet.
 
