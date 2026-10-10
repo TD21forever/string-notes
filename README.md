@@ -64,6 +64,9 @@ The current preview is available for **Apple Silicon Macs (M-series chips)**. Th
 brew install --cask TD21forever/tap/string-notes
 ```
 
+You can also download `StringNotes-0.11.0-arm64.dmg` from the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0), open it, and drag the app to Applications. The DMG is also an unnotarized preview; macOS may require approval in Privacy & Security.
+
+
 ### Direct download
 
 Download `StringNotes-0.11.0-arm64.zip` from the [v0.11.0 release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0), unzip it, and move **绳上便笺.app** to Applications. Open it to get started.

@@ -62,6 +62,9 @@
 brew install --cask TD21forever/tap/string-notes
 ```
 
+也可从[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0)下载 `StringNotes-0.11.0-arm64.dmg`，打开后把应用拖到 Applications。DMG 同样是未公证预览版，macOS 仍可能要求在「隐私与安全」中放行。
+
+
 ### 直接下载
 
 前往 [v0.11.0 发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0)，下载 `StringNotes-0.11.0-arm64.zip`，解压后将 **绳上便笺.app** 拖到「应用程序」并打开。
