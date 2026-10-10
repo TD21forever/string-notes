@@ -42,7 +42,7 @@ try FileManager.default.createDirectory(at: failed.file, withIntermediateDirecto
 check(!failed.put(a) && failed.notes.isEmpty && !failed.error.isEmpty, "failed commit does not publish success")
 let welcomeFolder = root.appendingPathComponent("welcome")
 let welcome = Store(folder: welcomeFolder)
-check(welcome.notes.count == 1 && welcome.notes[0].text.hasPrefix("欢迎使用"), "first launch welcome")
+check(welcome.notes.count == 1 && welcome.notes[0].text.hasPrefix(AppLanguage.current == "en" ? "Welcome" : "欢迎使用"), "first launch welcome")
 check(Store(folder: welcomeFolder).notes == welcome.notes, "welcome never duplicates")
 check(welcome.delete(welcome.notes[0].id) && Store(folder: welcomeFolder).notes.isEmpty, "deleted welcome stays deleted")
 changed.staysOnTop = true
@@ -69,7 +69,7 @@ check(imported.notes.last?.richText == illustrated.richText, "backup includes im
 let fit = NSTextStorage(attributedString: document); NoteDocument.fitImages(fit, width: 180)
 let cell = (fit.attribute(.attachment, at: 4, effectiveRange: nil) as? NSTextAttachment)?.attachmentCell
 check(abs((cell?.cellSize().width ?? 0) - 180) < 1, "image fits narrow paper")
-check(NoteDocument.preview(illustrated).contains("[图片]"), "image-only preview is readable")
+check(NoteDocument.preview(illustrated).contains(L("[图片]")), "image-only preview is readable")
 
 let importStore = Store(folder: root.appendingPathComponent("import"), seedWelcome: false)
 let added = try importStore.importBackup(exported)
@@ -183,5 +183,5 @@ with tempfile.TemporaryDirectory(prefix='string-notes-test-') as folder:
     app_source = (root / 'Sources/main.swift').read_text()
     session_source = app_source[app_source.index('final class EditSession:'):app_source.index('final class NoteHostingView')]
     (path / 'EditSession.swift').write_text('import Foundation\nimport Combine\n' + session_source)
-    subprocess.run(['xcrun','swiftc','-module-cache-path','/tmp/string-notes-module-cache',str(root/'Sources/Store.swift'),str(root/'Sources/NoteDocument.swift'),str(root/'Sources/Markdown.swift'),str(path/'EditSession.swift'),str(path/'main.swift'),'-o',str(path/'test')],check=True)
+    subprocess.run(['xcrun','swiftc','-module-cache-path','/tmp/string-notes-module-cache',str(root/'Sources/Localization.swift'),str(root/'Sources/Store.swift'),str(root/'Sources/NoteDocument.swift'),str(root/'Sources/Markdown.swift'),str(path/'EditSession.swift'),str(path/'main.swift'),'-o',str(path/'test')],check=True)
     subprocess.run([str(path/'test'),str(path/'data')],check=True)

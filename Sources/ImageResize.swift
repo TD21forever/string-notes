@@ -87,7 +87,7 @@ class ResizableImageTextView: NSTextView {
         guard let replacement = NoteDocument.resized(attachment, desiredWidth: width, available: availableWidth) else { return }
         // Native text replacement makes a whole resize one undoable edit and triggers autosave.
         insertText(replacement, replacementRange: range)
-        setSelectedRange(range); undoManager?.setActionName("调整图片大小"); needsDisplay = true
+        setSelectedRange(range); undoManager?.setActionName(L("调整图片大小")); needsDisplay = true
     }
     @objc private func fitSelectedImage(_ sender: Any?) { resizeSelected(width: 0) }
     @objc private func originalImageSize(_ sender: Any?) {
@@ -103,7 +103,7 @@ class ResizableImageTextView: NSTextView {
         let menu = super.menu(for: event) ?? NSMenu()
         if selectedRange().length == 1, image(at: selectedRange().location) != nil {
             menu.addItem(.separator())
-            for (title, action) in [("适应便笺宽度", #selector(fitSelectedImage(_:))), ("恢复原始大小", #selector(originalImageSize(_:)))] {
+            for (title, action) in [(L("适应便笺宽度"), #selector(fitSelectedImage(_:))), (L("恢复原始大小"), #selector(originalImageSize(_:)))] {
                 let item = NSMenuItem(title: title, action: action, keyEquivalent: ""); item.target = self; menu.addItem(item)
             }
         }

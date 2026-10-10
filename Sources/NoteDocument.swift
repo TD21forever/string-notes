@@ -52,6 +52,6 @@ enum NoteDocument {
         return NSAttributedString(attachment: result)
     }
     static func preview(_ note: Memo) -> String {
-        note.text.replacingOccurrences(of: "\u{fffc}", with: "[图片]")
+        note.text.replacingOccurrences(of: "\u{fffc}", with: L("[图片]"))
     }
 }

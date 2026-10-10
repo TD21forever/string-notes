@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.10.2"><img src="https://img.shields.io/badge/version-0.10.2%20preview-e5b85b" alt="0.10.2 测试版"></a>
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.11.0"><img src="https://img.shields.io/badge/version-0.11.0%20preview-e5b85b" alt="0.11.0 测试版"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13 及以上构建目标">
   <img src="https://img.shields.io/badge/Apple%20Silicon-arm64-555555" alt="Apple Silicon">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
@@ -64,7 +64,7 @@ brew install --cask TD21forever/tap/string-notes
 
 ### 直接下载
 
-前往 [v0.10.2 发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.10.2)，下载 `StringNotes-0.10.2-arm64.zip`，解压后将 **绳上便笺.app** 拖到「应用程序」并打开。
+前往 [v0.11.0 发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0)，下载 `StringNotes-0.11.0-arm64.zip`，解压后将 **绳上便笺.app** 拖到「应用程序」并打开。
 
 > **首次启动提示**
 >
@@ -153,11 +153,15 @@ brew uninstall --cask string-notes
 
 ## 测试版与反馈
 
-目前是 **0.10.2 预览版**。存储、备份合并、损坏数据保护、图片持久化与缩放、Markdown、排序数据逻辑和多编辑会话已有隔离测试；不同 macOS、显示器、中文输入法和 Space 下的界面体验仍需继续验证。
+目前是 **0.11.0 预览版**。存储、备份合并、损坏数据保护、图片持久化与缩放、Markdown、排序数据逻辑和多编辑会话已有隔离测试；不同 macOS、显示器、中文输入法和 Space 下的界面体验仍需继续验证。
 
 便笺盒现仅保留便笺和归档，恢复草稿合并展示在便笺列表，不再单列草稿或回收站。删除记录仍保存在本地数据和备份中，但当前界面没有恢复入口；可能还会用到的便笺建议归档。
 
-当前尚未提供自动云同步、自动版本历史、应用内自动更新和公证发行包。
+支持中文和 English，默认跟随系统。可在「设置 → 通用 → 语言」选择，重启应用后生效；已有便笺内容不会被翻译。
+
+菜单栏图标菜单中的「检查更新…」会检查 GitHub Release（含预览版）。设置中可查看发布说明并下载对应 Mac 架构的安装包；启动时自动检查每天最多一次，可以关闭。下载后退出应用并替换「应用程序」中的旧版本，目前不会自动安装。Homebrew 用户仍可执行 `brew upgrade --cask TD21forever/tap/string-notes`。
+
+当前尚未提供自动云同步、自动版本历史和公证发行包。
 
 遇到问题或有想法，欢迎到 [Issues](https://github.com/TD21forever/string-notes/issues) 留言。反馈时请附上应用版本、macOS 版本、芯片类型和复现步骤；截图请先遮住私人便笺内容。
 

@@ -13,7 +13,9 @@ jobs:
         shell: bash
         run: test "${GITHUB_REF_NAME#v}" = "$(cat VERSION)"
       - name: Verify isolated checks
-        run: python3 tests/check-store.py
+        run: |
+          python3 tests/check-store.py
+          python3 tests/check-updates.py
       - name: Build arm64 distribution
         run: ./scripts/package.sh
       - name: Create preview release if absent
@@ -21,5 +23,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.sha256 --verify-tag --prerelease --generate-notes --title "绳上便笺 $GITHUB_REF_NAME · Apple Silicon Preview"
+            gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.sha256 --verify-tag --prerelease --notes-file "release-notes/$GITHUB_REF_NAME.md" --title "绳上便笺 $GITHUB_REF_NAME · Apple Silicon Preview"
           fi

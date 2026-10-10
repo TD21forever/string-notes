@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.10.2"><img src="https://img.shields.io/badge/version-0.10.2%20preview-e5b85b" alt="0.10.2 preview"></a>
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.11.0"><img src="https://img.shields.io/badge/version-0.11.0%20preview-e5b85b" alt="0.11.0 preview"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13+ build target">
   <img src="https://img.shields.io/badge/Apple%20Silicon-arm64-555555" alt="Apple Silicon">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
@@ -30,7 +30,7 @@ Pause your pointer over the menu bar and a string of colorful notes slides into 
 
 Built with **Swift, SwiftUI, and AppKit**. No account required. Your notes and images stay on your Mac.
 
-> The current app interface is in Chinese. This English README makes the project easier to discover; it does not indicate an English app localization.
+> The app supports English and Simplified Chinese. It follows your system language by default; change it in Settings → General → Language and restart the app. Existing notes are never translated.
 
 ## At a glance
 
@@ -66,7 +66,7 @@ brew install --cask TD21forever/tap/string-notes
 
 ### Direct download
 
-Download `StringNotes-0.10.2-arm64.zip` from the [v0.10.2 release page](https://github.com/TD21forever/string-notes/releases/tag/v0.10.2), unzip it, and move **绳上便笺.app** to Applications. Open it to get started.
+Download `StringNotes-0.11.0-arm64.zip` from the [v0.11.0 release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0), unzip it, and move **绳上便笺.app** to Applications. Open it to get started.
 
 > **Opening the preview for the first time**
 >
@@ -155,11 +155,13 @@ Importing a backup merges new notes. When an ID already exists, the local versio
 
 ## Preview status and feedback
 
-This is the **0.10.2 preview**. Isolated tests cover storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
+This is the **0.11.0 preview**. Isolated tests cover storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
 
 The library now has only Notes and Archive. Draft recovery is merged into the note list; there is no separate Drafts or Trash tab. Deleted records remain in local storage and backups, but there is currently no restore action in the UI. Archive notes you may want to revisit.
 
-Automatic cloud sync, automatic version history, in-app updates, and a notarized distribution are not available yet.
+Choose **Check for Updates…** from the menu bar icon to check GitHub releases, including previews. Settings → Data & About offers release notes and the download for your Mac. Automatic checks happen on launch at most once per day and can be disabled. After downloading, quit the app and replace it in Applications; this does not install updates automatically. Homebrew users can keep using `brew upgrade --cask TD21forever/tap/string-notes`.
+
+Automatic cloud sync, automatic version history, and a notarized distribution are not available yet.
 
 Found a problem or have an idea? Open an [issue](https://github.com/TD21forever/string-notes/issues). For bugs, include the app version, macOS version, chip type, and steps to reproduce. Hide private note content before sharing screenshots.
 

@@ -20,7 +20,7 @@ enum Brand {
             text.move(to: .init(x: 10.5, y: 12)); text.line(to: .init(x: 15.5, y: 12)); text.stroke()
             return true
         }
-        image.isTemplate = true; image.accessibilityDescription = "绳上便笺"; return image
+        image.isTemplate = true; image.accessibilityDescription = L("绳上便笺"); return image
     }
     static func appIcon(size: CGFloat) -> NSImage {
         NSImage(size: NSSize(width: size, height: size), flipped: true) { _ in

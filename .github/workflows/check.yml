@@ -12,5 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify isolated storage and editor checks
         run: python3 tests/check-store.py
+      - name: Verify updates and localization
+        run: python3 tests/check-updates.py
       - name: Build and package arm64 app
         run: ./scripts/package.sh

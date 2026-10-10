@@ -81,7 +81,7 @@ struct MemoCard: View {
     var body: some View {
         VStack(spacing: -12) {
             Peg().padding(.horizontal, 13).contentShape(Rectangle()).zIndex(2)
-                .help("向下拖取下，沿绳拖动排序")
+                .help(L("向下拖取下，沿绳拖动排序"))
             Button(action: edit) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(NoteDocument.preview(note)).font(.system(size: 14, weight: .regular)).lineSpacing(4)
@@ -94,7 +94,7 @@ struct MemoCard: View {
                     .clipShape(RoundedRectangle(cornerRadius: 4))
                     .overlay(RoundedRectangle(cornerRadius: 4).stroke(.white.opacity(0.45), lineWidth: 0.6))
                     .shadow(color: .black.opacity(hover ? 0.23 : 0.16), radius: hover ? 10 : 6, x: 1, y: hover ? 7 : 4)
-            }.buttonStyle(TactileButtonStyle()).help("点击编辑便笺").accessibilityHidden(true)
+            }.buttonStyle(TactileButtonStyle()).help(L("点击编辑便笺")).accessibilityHidden(true)
         }.overlay { CardDragSurface(title: NoteDocument.preview(note), hovered: { hover = $0 }, clicked: edit, moved: drag, dropped: drop) }.recordsHitRect()
             .rotationEffect(.degrees(swing + (hover && !motionOff ? 0 : (index % 2 == 0 ? -1.5 : 1.2))), anchor: .init(x: 0.5, y: 9.5 / 156))
             .scaleEffect(hover && !motionOff ? 1.045 : 1, anchor: .top)
@@ -151,10 +151,10 @@ struct Board: View {
                         .frame(width: 28, height: 28).background(.regularMaterial, in: Circle())
                         .overlay(Circle().stroke(.white.opacity(0.55), lineWidth: 0.7))
                         .shadow(color: .black.opacity(0.12), radius: 3, y: 2)
-                }.buttonStyle(TactileButtonStyle()).help("写一张便笺").accessibilityLabel("写一张便笺")
+                }.buttonStyle(TactileButtonStyle()).help(L("写一张便笺")).accessibilityLabel(L("写一张便笺"))
                     .recordsHitRect().position(x: plusX, y: HangingLayout.ropeY(plusX, geo.size.width) + 22)
                 if hanging.isEmpty && presentation.dropIndex == nil {
-                    Text("写一张，把念头挂起来").font(.system(size: 12)).padding(.horizontal, 12).padding(.vertical, 7)
+                    Text(L("写一张，把念头挂起来")).font(.system(size: 12)).padding(.horizontal, 12).padding(.vertical, 7)
                         .background(.regularMaterial, in: Capsule()).position(x: geo.size.width / 2, y: 102)
                 }
                 if !store.error.isEmpty {
@@ -259,7 +259,7 @@ final class NoteTextView: ResizableImageTextView {
     }
     override func menu(for event: NSEvent) -> NSMenu? {
         let menu = super.menu(for: event) ?? NSMenu()
-        let item = NSMenuItem(title: "插入图片…", action: #selector(insertImage(_:)), keyEquivalent: "")
+        let item = NSMenuItem(title: L("插入图片…"), action: #selector(insertImage(_:)), keyEquivalent: "")
         item.target = self; menu.addItem(.separator()); menu.addItem(item); return menu
     }
     override func setFrameSize(_ newSize: NSSize) {
@@ -280,7 +280,7 @@ struct PaperTextEditor: NSViewRepresentable {
         init(_ parent: PaperTextEditor) { self.parent = parent }
         func textDidChange(_ notification: Notification) {
             guard let view = notification.object as? NoteTextView, !view.hasMarkedText(), !view.styling else { return }
-            guard let data = NoteDocument.encode(MarkdownStyle.canonical(view.attributedString(), font: NotePreferences.font)) else { parent.session.status = "保存失败"; parent.session.encodingFailed = true; return }
+            guard let data = NoteDocument.encode(MarkdownStyle.canonical(view.attributedString(), font: NotePreferences.font)) else { parent.session.status = L("保存失败"); parent.session.encodingFailed = true; return }
             var note = parent.session.note; note.text = view.string; note.richText = data
             parent.session.encodingFailed = false; parent.session.note = note
             view.restyle()
@@ -324,12 +324,12 @@ struct PaperTextEditor: NSViewRepresentable {
 }
 final class EditSession: ObservableObject {
     @Published var note: Memo
-    @Published var status = "已保存"
+    @Published var status = L("已保存")
     var encodingFailed = false
     private var pending: DispatchWorkItem?
-    init(_ note: Memo) { self.note = note; if note.text.isEmpty { status = "输入后自动保存" } }
+    init(_ note: Memo) { self.note = note; if note.text.isEmpty { status = L("输入后自动保存") } }
     func changed(_ store: Store) {
-        cancelPending(); status = "正在保存…"
+        cancelPending(); status = L("正在保存…")
         let work = DispatchWorkItem { [weak self, weak store] in
             guard let self = self, let store = store else { return }; _ = self.flush(store)
         }
@@ -337,7 +337,7 @@ final class EditSession: ObservableObject {
     }
     func cancelPending() { pending?.cancel(); pending = nil }
     @discardableResult func flush(_ store: Store) -> Bool {
-        cancelPending(); guard !encodingFailed else { status = "保存失败，请保留窗口并复制内容"; return false }; let ok = store.autoSave(note); status = ok ? "已保存" : "保存失败"; return ok
+        cancelPending(); guard !encodingFailed else { status = L("保存失败，请保留窗口并复制内容"); return false }; let ok = store.autoSave(note); status = ok ? L("已保存") : L("保存失败"); return ok
     }
     deinit { pending?.cancel() }
 }
@@ -371,25 +371,25 @@ struct Editor: View {
                     Text(session.status).font(.system(size: 10)).foregroundStyle(.black.opacity(0.45))
                     Spacer()
                 }.frame(maxWidth: .infinity, minHeight: 44)
-                    .overlay { NoteWindowDragSurface() }.help("拖动窗口；拖回绳子可挂起")
+                    .overlay { NoteWindowDragSurface() }.help(L("拖动窗口；拖回绳子可挂起"))
                 Button { let value = !(session.note.staysOnTop ?? false); session.note.staysOnTop = value; pin(value) } label: {
                     NoteToolbarIcon(name: session.note.staysOnTop == true ? "pin.fill" : "pin")
-                }.help("保持窗口最前").accessibilityLabel(session.note.staysOnTop == true ? "取消窗口置顶" : "保持窗口最前")
+                }.help(L("保持窗口最前")).accessibilityLabel(session.note.staysOnTop == true ? L("取消窗口置顶") : L("保持窗口最前"))
                 Menu {
                     ForEach(0..<4) { i in
-                        Button(["奶黄色", "鼠尾草绿", "桃粉色", "雾蓝色"][i]) { session.note.color = i }
+                        Button([L("奶黄色"), L("鼠尾草绿"), L("桃粉色"), L("雾蓝色")][i]) { session.note.color = i }
                     }
                     Divider()
-                    Button(session.note.done ? "挂回绳上" : "归档便笺") { session.note.done.toggle(); save(session.note) }
-                    if store.notes.contains(where: { $0.id == session.note.id }) { Button("删除便笺", action: remove) }
-                } label: { NoteToolbarIcon(name: "ellipsis") }.menuStyle(.borderlessButton).menuIndicator(.hidden).frame(width: 36, height: 36).accessibilityLabel("便笺选项")
-                Button(action: close) { NoteToolbarIcon(name: "xmark") }.help("保存并关闭 · Esc").accessibilityLabel("保存并关闭")
+                    Button(session.note.done ? L("挂回绳上") : L("归档便笺")) { session.note.done.toggle(); save(session.note) }
+                    if store.notes.contains(where: { $0.id == session.note.id }) { Button(L("删除便笺"), action: remove) }
+                } label: { NoteToolbarIcon(name: "ellipsis") }.menuStyle(.borderlessButton).menuIndicator(.hidden).frame(width: 36, height: 36).accessibilityLabel(L("便笺选项"))
+                Button(action: close) { NoteToolbarIcon(name: "xmark") }.help(L("保存并关闭 · Esc")).accessibilityLabel(L("保存并关闭"))
             }.buttonStyle(.plain).font(.system(size: 12)).foregroundStyle(.black.opacity(0.6))
                 .padding(.leading, 18).padding(.trailing, 6).frame(height: 44).background(.black.opacity(0.035))
             PaperTextEditor(session: session, submit: { save(session.note) }, dismiss: close)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             if !store.error.isEmpty || session.encodingFailed {
-                Text(store.error.isEmpty ? "内容转换失败，请保留窗口并复制内容。" : store.error)
+                Text(store.error.isEmpty ? L("内容转换失败，请保留窗口并复制内容。") : store.error)
                     .font(.system(size: 11)).foregroundStyle(.red).padding(12).textSelection(.enabled)
             }
         }.frame(minWidth: 280, minHeight: 220).ignoresSafeArea().background(papers[max(0,min(3,session.note.color))]).preferredColorScheme(.light)
@@ -418,19 +418,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         NSApp.setActivationPolicy(.accessory)
         let mainMenu = NSMenu()
         let appItem = NSMenuItem(); let appMenu = NSMenu()
-        appMenu.addItem(withTitle: "退出绳上便笺", action: #selector(quit), keyEquivalent: "q").target = self
-        appMenu.addItem(withTitle: "写一张便笺", action: #selector(newNote), keyEquivalent: "n").target = self
-        appMenu.addItem(withTitle: "便笺盒", action: #selector(findNote), keyEquivalent: "f").target = self
-        appMenu.addItem(withTitle: "设置…", action: #selector(openSettings), keyEquivalent: ",").target = self
+        appMenu.addItem(withTitle: L("退出绳上便笺"), action: #selector(quit), keyEquivalent: "q").target = self
+        appMenu.addItem(withTitle: L("写一张便笺"), action: #selector(newNote), keyEquivalent: "n").target = self
+        appMenu.addItem(withTitle: L("便笺盒"), action: #selector(findNote), keyEquivalent: "f").target = self
+        appMenu.addItem(withTitle: L("设置…"), action: #selector(openSettings), keyEquivalent: ",").target = self
+        appMenu.addItem(withTitle: L("检查更新…"), action: #selector(checkForUpdates), keyEquivalent: "").target = self
         appItem.submenu = appMenu; mainMenu.addItem(appItem)
-        let editItem = NSMenuItem(); editItem.title = "编辑"; let editMenu = NSMenu(title: "编辑")
-        for (title, selector, key) in [("撤销", "undo:", "z"), ("重做", "redo:", "Z"), ("剪切", "cut:", "x"), ("复制", "copy:", "c"), ("粘贴", "paste:", "v"), ("全选", "selectAll:", "a")] {
+        let editItem = NSMenuItem(); editItem.title = L("编辑"); let editMenu = NSMenu(title: L("编辑"))
+        for (title, selector, key) in [(L("撤销"), "undo:", "z"), (L("重做"), "redo:", "Z"), (L("剪切"), "cut:", "x"), (L("复制"), "copy:", "c"), (L("粘贴"), "paste:", "v"), (L("全选"), "selectAll:", "a")] {
             editMenu.addItem(withTitle: title, action: Selector(selector), keyEquivalent: key)
         }
         editItem.submenu = editMenu; mainMenu.addItem(editItem); NSApp.mainMenu = mainMenu
         status = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         status.button?.image = Brand.menuIcon()
-        status.button?.toolTip = "绳上便笺 · 点击展开，右键打开工具箱"
+        status.button?.toolTip = L("绳上便笺 · 点击展开，右键打开工具箱")
         status.button?.target = self; status.button?.action = #selector(toggle)
         status.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
         panel = LinePanel(contentRect: .zero, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
@@ -455,6 +456,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             }
         }
         Shortcuts.shared.start()
+        UpdateChecker.shared.checkAutomatically()
         scheduleTracking()
         show()
     }
@@ -462,13 +464,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     @objc func toggle() {
         if NSApp.currentEvent?.type == .rightMouseUp {
             let menu = NSMenu()
-            menu.addItem(withTitle: "新建便笺", action: #selector(newNote), keyEquivalent: "n").target = self
-            menu.addItem(withTitle: "所有便笺", action: #selector(openLibrary), keyEquivalent: "").target = self
-            if store.canUndoOrder { menu.addItem(withTitle: "撤销上次排序", action: #selector(undoSort), keyEquivalent: "").target = self }
+            menu.addItem(withTitle: L("新建便笺"), action: #selector(newNote), keyEquivalent: "n").target = self
+            menu.addItem(withTitle: L("所有便笺"), action: #selector(openLibrary), keyEquivalent: "").target = self
+            if store.canUndoOrder { menu.addItem(withTitle: L("撤销上次排序"), action: #selector(undoSort), keyEquivalent: "").target = self }
             menu.addItem(.separator())
-            menu.addItem(withTitle: "设置…", action: #selector(openSettings), keyEquivalent: ",").target = self
+            menu.addItem(withTitle: L("设置…"), action: #selector(openSettings), keyEquivalent: ",").target = self
+            menu.addItem(withTitle: L("检查更新…"), action: #selector(checkForUpdates), keyEquivalent: "").target = self
             menu.addItem(.separator())
-            menu.addItem(withTitle: "退出绳上便笺", action: #selector(quit), keyEquivalent: "q").target = self
+            menu.addItem(withTitle: L("退出绳上便笺"), action: #selector(quit), keyEquivalent: "q").target = self
             status.menu = menu; status.button?.performClick(nil); status.menu = nil
         } else if presentation.revealed { tuck() } else { show() }
     }
@@ -501,14 +504,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             library.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true); return
         }
         let win = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 530, height: 480), styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false)
-        win.title = "便笺盒"; win.isReleasedWhenClosed = false
+        win.title = L("便笺盒"); win.isReleasedWhenClosed = false
         win.contentView = NSHostingView(rootView: LibraryView(store: store, edit: { [weak self] in self?.openEditor($0) }, initialSection: section))
         win.minSize = NSSize(width: 490, height: 380); library = win; win.center(); win.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true)
+    }
+    @objc func checkForUpdates() {
+        openSettings()
+        preferences?.contentView = NSHostingView(rootView: SettingsView(store: store, showingUpdates: true))
+        UpdateChecker.shared.check()
     }
     @objc func openSettings() {
         if let preferences = preferences { preferences.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true); return }
         let win = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 720, height: 570), styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false)
-        win.title = "设置"; win.isReleasedWhenClosed = false; win.minSize = NSSize(width: 680, height: 500)
+        win.title = L("设置"); win.isReleasedWhenClosed = false; win.minSize = NSSize(width: 680, height: 500)
         win.contentView = NSHostingView(rootView: SettingsView(store: store))
         preferences = win; win.center(); win.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true)
     }
@@ -650,7 +658,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         win.standardWindowButton(.closeButton)?.isHidden = true; win.standardWindowButton(.miniaturizeButton)?.isHidden = true; win.standardWindowButton(.zoomButton)?.isHidden = true
         win.minSize = NSSize(width: 280, height: 220)
         win.setFrameAutosaveName("note-" + note.id.uuidString)
-        win.title = note.text.split(separator: "\n").first.map { String($0.prefix(36)) } ?? "新便笺"; win.isReleasedWhenClosed = false; win.delegate = self
+        win.title = note.text.split(separator: "\n").first.map { String($0.prefix(36)) } ?? L("新便笺"); win.isReleasedWhenClosed = false; win.delegate = self
         win.contentView = NoteHostingView(rootView: Editor(session: session, store: store, isNew: !store.notes.contains(where: {$0.id == note.id}), save: { [weak self] note in
             guard let self = self, let entry = self.editors[note.id], entry.session.flush(self.store) else { return }; self.finishEditor(note.id)
         }, remove: { [weak self] in

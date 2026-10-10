@@ -58,10 +58,10 @@ final class Store: ObservableObject {
                 }
             } else if seedWelcome {
                 var first = Notebook()
-                first.notes = [Memo(text: "欢迎使用绳上便笺\n\n把眼前的小事，挂在绳子上。\n\n鼠标停在菜单栏展开，点 ＋ 新建，拖动夹子排序。\n\n写下即自动保存，Esc 关闭。点图钉可让窗口保持最前。\n\n右键菜单栏打开便笺盒和设置，可查找、归档并自定义全局快捷键。")]
+                first.notes = [Memo(text: L("欢迎使用绳上便笺\n\n把眼前的小事，挂在绳子上。\n\n鼠标停在菜单栏展开，点 ＋ 新建，拖动夹子排序。\n\n写下即自动保存，Esc 关闭。点图钉可让窗口保持最前。\n\n右键菜单栏打开便笺盒和设置，可查找、归档并自定义全局快捷键。"))]
                 commit(first)
             }
-        } catch { blocked = true; self.error = "无法读取便笺，已停止写入以保护原文件。请从设置打开数据目录检查或恢复备份。" }
+        } catch { blocked = true; self.error = L("无法读取便笺，已停止写入以保护原文件。请从设置打开数据目录检查或恢复备份。") }
     }
     @discardableResult private func commit(_ next: Notebook) -> Bool {
         guard !blocked else { return false }
@@ -69,7 +69,7 @@ final class Store: ObservableObject {
             let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
             try encoder.encode(next).write(to: file, options: .atomic)
             book = next; error = ""; return true
-        } catch { self.error = "保存失败，内容尚未写入磁盘。请保留窗口，复制文字或检查数据目录后重试。"; return false }
+        } catch { self.error = L("保存失败，内容尚未写入磁盘。请保留窗口，复制文字或检查数据目录后重试。"); return false }
     }
     @discardableResult func autoSave(_ note: Memo) -> Bool {
         if notes.first(where: { $0.id == note.id }) == note && !drafts.contains(where: { $0.id == note.id }) { return true }
@@ -113,14 +113,14 @@ final class Store: ObservableObject {
         var next = book
         if let i = next.notes.firstIndex(where: {$0.id == note.id}) { next.notes[i] = note } else { next.notes.append(note) }
         next.drafts.removeAll { $0.id == note.id }
-        let ok = commit(next); if ok { message = note.done ? "已收进归档" : "已挂上绳子" }; return ok
+        let ok = commit(next); if ok { message = note.done ? L("已收进归档") : L("已挂上绳子") }; return ok
     }
     @discardableResult func delete(_ id: UUID) -> Bool {
         var next = book
         guard let i = next.notes.firstIndex(where: {$0.id == id}) else { return false }
         next.trash.append(RemovedMemo(note: next.notes.remove(at: i), index: i))
         next.drafts.removeAll { $0.id == id }
-        let ok = commit(next); if ok { message = "已移到回收站，可以撤销" }; return ok
+        let ok = commit(next); if ok { message = L("已移到回收站，可以撤销") }; return ok
     }
     @discardableResult func restore(_ id: UUID? = nil) -> Bool {
         var next = book
@@ -128,7 +128,7 @@ final class Store: ObservableObject {
         let item = next.trash.remove(at: i)
         guard !next.notes.contains(where: {$0.id == item.note.id}) else { return false }
         next.notes.insert(item.note, at: min(item.index, next.notes.count))
-        let ok = commit(next); if ok { message = "便笺已找回" }; return ok
+        let ok = commit(next); if ok { message = L("便笺已找回") }; return ok
     }
     @discardableResult func place(_ id: UUID, before target: UUID?) -> Bool {
         guard target != id else { return true }
@@ -149,7 +149,7 @@ final class Store: ObservableObject {
         guard let from = next.notes.firstIndex(where: {$0.id == id}), let to = next.notes.firstIndex(where: {$0.id == target}), from != to else { return false }
         let before = next.notes
         next.notes.insert(next.notes.remove(at: from), at: to)
-        let ok = commit(next); if ok { previousOrder = before; message = "顺序已调整" }; return ok
+        let ok = commit(next); if ok { previousOrder = before; message = L("顺序已调整") }; return ok
     }
     @discardableResult func undoOrder() -> Bool {
         guard let order = previousOrder else { return false }
@@ -157,6 +157,6 @@ final class Store: ObservableObject {
         let byID = Dictionary(uniqueKeysWithValues: next.notes.map { ($0.id, $0) })
         let ids = Set(order.map(\.id))
         next.notes = order.compactMap { byID[$0.id] } + next.notes.filter { !ids.contains($0.id) }
-        let ok = commit(next); if ok { previousOrder = nil; message = "已撤销排序" }; return ok
+        let ok = commit(next); if ok { previousOrder = nil; message = L("已撤销排序") }; return ok
     }
 }
