@@ -1,81 +1,186 @@
-<p align="center"><img src="Assets/app-icon.png" width="128" alt="绳上便笺"></p>
+<p align="center">
+  <img src="Assets/app-icon.png" width="120" alt="String Notes icon">
+</p>
 
-# 绳上便笺 · String Notes
+<h1 align="center">String Notes · 绳上便笺</h1>
 
-把眼前的小事，挂在绳子上。
+<p align="center"><strong>Hang a thought. Keep it in sight.</strong></p>
 
-原生 macOS 菜单栏便笺。鼠标停在菜单栏片刻，一根细绳带着纸条滑下来；点开记录，写下自动保存，完成后收进便笺盒。使用 Swift、SwiftUI 和 AppKit，没有网页容器。
+<p align="center">
+  Native macOS menu bar notes for little tasks, passing ideas, and things you want to remember.
+</p>
 
-## 安装
+<p align="center">
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.10.0"><img src="https://img.shields.io/badge/version-0.10.0%20preview-e5b85b" alt="0.10.0 preview"></a>
+  <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13+ build target">
+  <img src="https://img.shields.io/badge/Apple%20Silicon-arm64-555555" alt="Apple Silicon">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
+</p>
 
-当前提供 **Apple Silicon（M 系列）测试版**，最低构建目标为 macOS 13 Ventura。最低版本设备兼容性尚未实机验证。Intel 版尚未发布。
+<p align="center"><strong>English</strong> · <a href="README.zh-CN.md">简体中文</a></p>
+
+<p align="center">
+  <a href="#install">Install</a> ·
+  <a href="#get-started">Get started</a> ·
+  <a href="#your-notes-and-backups">Your notes & backups</a> ·
+  <a href="https://github.com/TD21forever/string-notes/issues">Report an issue</a>
+</p>
+
+Pause your pointer over the menu bar and a string of colorful notes slides into view. Open a note to catch a thought, drag its clip to move it along the string, and archive it when you are done. Tuck the string away when you want to focus.
+
+Built with **Swift, SwiftUI, and AppKit**. No account required. Your notes and images stay on your Mac.
+
+> The current app interface is in Chinese. This English README makes the project easier to discover; it does not indicate an English app localization.
+
+## A place for the little things
+
+| | What String Notes offers |
+| --- | --- |
+| **Keep it in sight** | Colorful notes on a transparent string. Drag clips to reorder them; empty areas of the overlay let clicks pass through to the app underneath. |
+| **Catch a thought** | Open notes from the menu bar or a global shortcut. Changes save automatically, with multiple note windows and individual always-on-top controls. |
+| **Make yourself at home** | Native text editing, find, undo and redo, adjustable fonts and sizes, and common Markdown formatting. |
+| **Add more than words** | Paste or insert images. Drag their corner handles to resize them; each image remembers its own size. |
+| **Put things away** | Search the note library, archive finished notes, and recover deleted notes from the trash. |
+| **Set your own rhythm** | Customize global shortcuts, turn off hover-to-reveal, reduce motion, and export a complete backup whenever you need one. |
+
+## Install
+
+The current preview is available for **Apple Silicon Macs (M-series chips)**. The minimum build target is **macOS 13 Ventura**; compatibility has not yet been tested on a device running that minimum version. An Intel download is not available yet.
+
+### Homebrew
 
 ```bash
 brew install --cask TD21forever/tap/string-notes
 ```
 
-也可从 [v0.10.0 发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.10.0) 下载 ZIP，解压后将「绳上便笺.app」拖到「应用程序」。
+### Direct download
 
-此测试版只有 ad-hoc 签名，**尚未取得 Developer ID 签名及 Apple 公证**，macOS 可能阻止首次启动。如果系统支持，可通过访达右键「打开」或「系统设置 → 隐私与安全性」中的正常授权入口允许自己信任的应用。不要关闭 Gatekeeper；若无法正常授权，请等待公证版本或自行构建。
+Download `StringNotes-0.10.0-arm64.zip` from the [v0.10.0 release page](https://github.com/TD21forever/string-notes/releases/tag/v0.10.0), unzip it, and move **绳上便笺.app** to Applications. Open it to get started.
 
-升级：
+> **Opening the preview for the first time**
+>
+> This build is ad-hoc signed and has not been signed with a Developer ID or notarized by Apple. macOS may block the first launch. Where your macOS version offers the option, use Finder's right-click → Open or System Settings → Privacy & Security to approve an app you trust. If normal approval is unavailable, wait for a notarized build or build from source.
+
+<details>
+<summary>Upgrade or uninstall with Homebrew</summary>
+
+Upgrade:
 
 ```bash
 brew update
 brew upgrade --cask TD21forever/tap/string-notes
 ```
 
-## 可以做什么
-
-- 透明绳子悬浮层，空白区域不拦截下层应用。
-- 彩色便笺、多窗口、单张置顶，拖动夹子调整顺序。
-- 自动保存，关闭和退出补存；保存失败保留窗口或阻止退出。
-- 原生正文编辑、查找、撤销/重做、字体和字号设置。
-- Markdown 即时排版：标题、强调、代码、引用、列表和任务文本；未实现点击式任务复选框或完整 CommonMark。
-- 粘贴/插入图片，独立调整图片尺寸，保留原始图片数据。
-- 搜索便笺盒，归档和回收站恢复。
-- 四组可自定义全局快捷键，通过 Carbon 注册，不要求辅助功能权限。
-- JSON 完整备份导出与合并导入，包含图片和回收站。
-- 可关闭悬停展开，遵循应用及系统的减少动态效果设置。
-
-## 快速上手
-
-点击菜单栏的绳上纸条图标展开，或将鼠标停在菜单栏片刻。点绳子旁的「＋」新建，点纸条编辑。右键菜单栏图标打开所有便笺、设置或退出。
-
-正文中 Return 换行，⌘F 查找，⌘Z 撤销，⇧⌘Z 重做；Esc 先关闭查找栏，再保存关闭便笺，⌘Return 保存关闭。⌘N 新建，⌘, 打开设置。
-
-全局快捷键默认是 ⌃⌥⌘N 新建、⌃⌥⌘A 所有便笺、⌃⌥⌘L 归档、⌃⌥⌘S 展开/收起，可在设置录入新组合或清除。
-
-## 数据与备份
-
-便笺保存在 `~/Library/Application Support/StringNotes/notes.json`，没有账户或自动云同步。图片以 RTFD 附件包含在数据文件内。设置使用本机 UserDefaults。
-
-写入采用原子替换；损坏文件或未知数据版本会阻止覆盖。旧版数组数据首次读取时保留 `notes-before-v3.json`。设置里的导出包含文字、图片、归档、草稿和回收站；导入只合并新 ID，同 ID 保留本机版本，**不是覆盖式回滚**。
-
-请定期导出备份。普通 `brew uninstall --cask string-notes` 只卸载应用，Cask 不配置删除便笺数据的 zap 动作。
-
-## 构建与测试
-
-安装 Xcode Command Line Tools 后：
+Uninstall the app:
 
 ```bash
+brew uninstall --cask string-notes
+```
+
+A normal uninstall keeps your local notes. The cask does not define a `zap` action that removes user data.
+
+</details>
+
+## Get started
+
+1. **Reveal the string.** Click the note icon in the menu bar, or pause your pointer over the menu bar.
+2. **Hang your first note.** Click **＋** beside the string and start writing. Changes save automatically.
+3. **Arrange your thoughts.** Click a note to edit it, drag its clip to change its position, or keep an editor window on top.
+4. **Archive what is done.** Archive a note, then find it in the library (**所有便笺**) whenever you want to read it or hang it back on the string.
+
+Right-click the menu bar icon to open the library, settings (**设置**), or quit the app.
+
+<details>
+<summary>Keyboard shortcuts</summary>
+
+Global shortcuts can be changed or cleared in settings. They do not require Accessibility permission.
+
+| Action | Default global shortcut |
+| --- | --- |
+| New note | ⌃⌥⌘N |
+| Open the library | ⌃⌥⌘A |
+| Open the archive | ⌃⌥⌘L |
+| Show / hide the string | ⌃⌥⌘S |
+
+Inside the editor:
+
+| Action | Shortcut |
+| --- | --- |
+| New line | Return |
+| Find | ⌘F |
+| Undo / redo | ⌘Z / ⇧⌘Z |
+| Save and close | ⌘Return |
+| Dismiss find; otherwise save and close | Esc |
+| New note | ⌘N |
+| Open settings | ⌘, |
+
+</details>
+
+<details>
+<summary>Markdown support</summary>
+
+Live formatting supports headings, emphasis, code, quotes, lists, and task text.
+
+Task lists are currently formatted text; their checkboxes cannot be clicked to toggle completion. The editor is not a full CommonMark implementation.
+
+</details>
+
+## Your notes and backups
+
+**Notes are stored locally on your Mac. No account is needed, and there is currently no automatic cloud sync.** In settings, choose the complete backup export (**完整备份 → 导出**) to save text, images, archived notes, drafts, and trash together. Export a backup before moving to a new Mac or trying a new version.
+
+Importing a backup merges new notes. When an ID already exists, the local version is kept. **Import does not overwrite existing notes and cannot roll back edits to them.**
+
+<details>
+<summary>Storage location and save protection</summary>
+
+- Notes: `~/Library/Application Support/StringNotes/notes.json`.
+- Images are included as RTFD attachments inside the data file, preserving their original data. Preferences use local UserDefaults.
+- Writes use atomic replacement. Corrupt files and unknown data versions are protected from being overwritten.
+- Closing an editor or quitting the app triggers a final save. If saving fails, the window stays open or quitting is blocked.
+- When legacy array data is first migrated, a copy is kept as `notes-before-v3.json`.
+
+</details>
+
+## Preview status and feedback
+
+This is the **0.10.0 preview**. Isolated tests cover storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
+
+Automatic cloud sync, automatic version history, in-app updates, and a notarized distribution are not available yet.
+
+Found a problem or have an idea? Open an [issue](https://github.com/TD21forever/string-notes/issues). For bugs, include the app version, macOS version, chip type, and steps to reproduce. Hide private note content before sharing screenshots.
+
+## Local development
+
+<details>
+<summary>Get the source, build, and test</summary>
+
+Requires macOS and Xcode Command Line Tools.
+
+```bash
+git clone https://github.com/TD21forever/string-notes.git
+cd string-notes
+
+# Build the app
 ./build.sh
+
+# Run isolated tests
 python3 tests/check-store.py
+
+# Package a release ZIP and generate its SHA256
 ./scripts/package.sh
 ```
 
-发布版本由 `VERSION` 决定。默认构建 arm64，设置 `STRING_NOTES_ARCH=x86_64` 可尝试 Intel 构建；本次发行不包含未经验证的 Intel 产物。
+The app is written to `build/`; release files are written to `dist/`. [VERSION](VERSION) sets the version number.
 
-图标重新生成：`./scripts/build-icons.sh`。构建输出在 `build/`，发行 ZIP 和 SHA256 在 `dist/`。GitHub Actions 执行隔离测试和打包；推送与 `VERSION` 匹配的 `v*` 标签可生成测试版 Release。Tap 的版本与校验和需同步更新。
+The default build is `arm64`. Set `STRING_NOTES_ARCH=x86_64` to try an Intel build; the current release does not include unverified Intel artifacts. After changing the icons, run `./scripts/build-icons.sh` to regenerate the icon resources.
 
-## 测试版范围
+GitHub Actions runs the isolated tests and packages the app. Pushing a `v*` tag that matches `VERSION` creates a preview release. Update the version and checksum in the [Homebrew tap](https://github.com/TD21forever/homebrew-tap) after publishing.
 
-存储、备份合并、损坏数据保护、图片持久化及缩放、Markdown、拖动排序数据逻辑和多编辑会话有隔离测试。此次发布不代表所有界面操作均已验收。
+</details>
 
-仍需在不同 macOS、显示器、中文输入法和 Space 上继续验证。当前没有自动云同步、自动版本历史、应用内自动更新或公证发行包。请通过 [Issues](https://github.com/TD21forever/string-notes/issues) 反馈系统版本、复现步骤和现象，避免上传私人便笺。
+## License and thanks
 
-## License and acknowledgements
+String Notes is available under the [MIT License](LICENSE), with its own name and custom-drawn icons.
 
-本项目代码使用 MIT License。绳子、金属夹子与透明悬浮层参考并改编自 [Tendedero](https://github.com/alejandrobujan/tendedero)，部分编辑行为参考 [Noty](https://github.com/aimen08/noty)；第三方声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。使用独立名称和自绘图标。
-
-Telegram macOS 客户端仅用于交互研究，没有复制其 GPL 源码或引入其框架。
+Thanks to [Tendedero](https://github.com/alejandrobujan/tendedero) for the string-and-clips idea. The string, metal clips, and transparent overlay were adapted from Tendedero; some editing behavior was adapted from [Noty](https://github.com/aimen08/noty). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution and licenses.
