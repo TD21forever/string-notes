@@ -1,0 +1,16 @@
+name: Check
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify isolated storage and editor checks
+        run: python3 tests/check-store.py
+      - name: Build and package arm64 app
+        run: ./scripts/package.sh

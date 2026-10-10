@@ -1,0 +1,25 @@
+name: Release preview
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Match version to tag
+        shell: bash
+        run: test "${GITHUB_REF_NAME#v}" = "$(cat VERSION)"
+      - name: Verify isolated checks
+        run: python3 tests/check-store.py
+      - name: Build arm64 distribution
+        run: ./scripts/package.sh
+      - name: Create preview release if absent
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.sha256 --verify-tag --prerelease --generate-notes --title "绳上便笺 $GITHUB_REF_NAME · Apple Silicon Preview"
+          fi
