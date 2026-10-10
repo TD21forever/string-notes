@@ -56,22 +56,31 @@
 
 目前提供 **Apple Silicon（M 系列芯片）测试版**。最低构建目标为 **macOS 13 Ventura**，最低版本设备尚未实机验证；暂未发布 Intel 安装包。
 
+### 下载 DMG
+
+1. 下载 [StringNotes-0.11.0-arm64.dmg](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.dmg)。
+2. 打开磁盘映像，将 **绳上便笺.app** 拖到 **Applications（应用程序）**。
+3. 从「应用程序」打开。升级时请先退出旧版，再替换应用；已有便笺会保留。
+
+也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.zip)，解压后将应用移到「应用程序」。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0)同时提供 SHA-256 校验文件。
+
 ### Homebrew
 
 ```bash
 brew install --cask TD21forever/tap/string-notes
 ```
 
-也可从[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0)下载 `StringNotes-0.11.0-arm64.dmg`，打开后把应用拖到 Applications。DMG 同样是未公证预览版，macOS 仍可能要求在「隐私与安全」中放行。
+### 首次打开被 macOS 拦截怎么办？
 
+当前预览版使用临时签名，尚未取得 Developer ID 签名和 Apple 公证。**无论通过 DMG、ZIP 还是 Homebrew 安装，都可能需要手动放行。**
 
-### 直接下载
+确认应用来自本项目发布页且你信任它后：
 
-前往 [v0.11.0 发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0)，下载 `StringNotes-0.11.0-arm64.zip`，解压后将 **绳上便笺.app** 拖到「应用程序」并打开。
+1. 尝试打开应用，在拦截提示中点击「完成」。
+2. 进入「系统设置 → 隐私与安全」，找到绳上便笺的拦截提示，点击「仍要打开」。
+3. 按 macOS 提示完成确认，再次打开应用。
 
-> **首次启动提示**
->
-> 当前测试版尚未取得 Developer ID 签名和 Apple 公证，macOS 可能阻止首次启动。若系统提供相应入口，可通过访达右键「打开」或「系统设置 → 隐私与安全性」允许启动你信任的应用。若无法正常授权，请等待公证版本或自行构建。
+入口可能因 macOS 版本或设备管理策略而不同，详见 [Apple 官方说明](https://support.apple.com/102445)。无需关闭系统整体的 Gatekeeper。便笺数据独立保存在 `~/Library/Application Support/StringNotes`，替换应用不会删除它们。
 
 <details>
 <summary>通过 Homebrew 升级或卸载</summary>

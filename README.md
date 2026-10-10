@@ -58,22 +58,31 @@ A real screenshot with four quick-start notes. From left to right:
 
 The current preview is available for **Apple Silicon Macs (M-series chips)**. The minimum build target is **macOS 13 Ventura**; compatibility has not yet been tested on a device running that minimum version. An Intel download is not available yet.
 
+### Download DMG
+
+1. Download [StringNotes-0.11.0-arm64.dmg](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.dmg).
+2. Open the disk image and drag **绳上便笺.app** to **Applications**.
+3. Open the app from Applications. When upgrading, quit the old app before replacing it. Your existing notes stay on this Mac.
+
+Prefer a ZIP? Download [StringNotes-0.11.0-arm64.zip](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.zip), unzip it, and move the app to Applications. Both formats contain the same app. SHA-256 checksum files are available on the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0).
+
 ### Homebrew
 
 ```bash
 brew install --cask TD21forever/tap/string-notes
 ```
 
-You can also download `StringNotes-0.11.0-arm64.dmg` from the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0), open it, and drag the app to Applications. The DMG is also an unnotarized preview; macOS may require approval in Privacy & Security.
+### If macOS blocks the first launch
 
+This preview is ad-hoc signed, without a Developer ID signature or Apple notarization. **DMG, ZIP, and Homebrew installations may all require manual approval.**
 
-### Direct download
+If you downloaded the app from this project's release page and trust it:
 
-Download `StringNotes-0.11.0-arm64.zip` from the [v0.11.0 release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0), unzip it, and move **绳上便笺.app** to Applications. Open it to get started.
+1. Try opening the app, then dismiss the warning with **Done**.
+2. Open **System Settings → Privacy & Security**, find the message about String Notes, and click **Open Anyway**.
+3. Follow the macOS confirmation prompts, then open the app again.
 
-> **Opening the preview for the first time**
->
-> This build is ad-hoc signed and has not been signed with a Developer ID or notarized by Apple. macOS may block the first launch. Where your macOS version offers the option, use Finder's right-click → Open or System Settings → Privacy & Security to approve an app you trust. If normal approval is unavailable, wait for a notarized build or build from source.
+The option may depend on your macOS version and device management policy. See [Apple's instructions](https://support.apple.com/102445). No step requires disabling Gatekeeper for the whole system. Your notes are stored separately in `~/Library/Application Support/StringNotes`; replacing the app does not remove them.
 
 <details>
 <summary>Upgrade or uninstall with Homebrew</summary>
