@@ -23,6 +23,8 @@ jobs:
         run: python3 tests/check-store.py
       - name: Verify updates and localization
         run: python3 tests/check-updates.py
+      - name: Verify rope visibility
+        run: python3 tests/check-rope.py
       - name: Build and verify architecture
         run: |
           ./scripts/package.sh

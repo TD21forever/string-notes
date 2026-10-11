@@ -403,8 +403,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var panel: LinePanel!
     let presentation = Presentation()
     var pinned = false
-    var menuSince: Date?
-    var revealCooldown = Date.distantPast
+    var ropeVisibility = RopeVisibilityPolicy()
     var editors: [UUID: (window: NSWindow, session: EditSession)] = [:]
     var library: NSWindow?
     var preferences: NSWindow?
@@ -528,12 +527,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         panel.setFrame(rect, display: true)
         presentation.scroll = min(presentation.scroll, HangingLayout.maxScroll(count: store.active.count, width: rect.width))
         panel.orderFrontRegardless(); outsideSince = nil; enteredPanel = false; self.pinned = pinned
+        ropeVisibility.didShow()
         presentation.revealed = true; scheduleTracking()
     }
-    func tuck() {
-        guard editors.isEmpty, NSEvent.pressedMouseButtons == 0 else { return }
+    func tuck(automatic: Bool = false) {
+        guard ropeVisibility.hide(automatic: automatic, hasEditors: !editors.isEmpty, mousePressed: NSEvent.pressedMouseButtons != 0, dragging: cardDragging) else { return }
         presentation.revealed = false; panel.ignoresMouseEvents = true; scheduleTracking()
-        pinned = false; menuSince = nil; revealCooldown = Date().addingTimeInterval(0.7)
+        pinned = false; outsideSince = nil; enteredPanel = false
     }
     func trackPointer() {
         let mouse = NSEvent.mouseLocation
@@ -546,22 +546,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             // Keep the drag session alive even between cards.
             if !pressed { panel.ignoresMouseEvents = !overCard }
         } else { panel.ignoresMouseEvents = true }
-        guard editors.isEmpty else { return }
-        if pressed && !panel.ignoresMouseEvents { return }
         guard let screen = NSScreen.screens.first(where: {$0.frame.contains(mouse)}) else { return }
         let inMenuBar = mouse.y >= screen.visibleFrame.maxY && mouse.y <= screen.frame.maxY
+        ropeVisibility.trackMenuBar(inMenuBar)
+        guard editors.isEmpty else { return }
+        if pressed && !panel.ignoresMouseEvents { return }
         if !presentation.revealed {
-            if inMenuBar && !pressed && Date() > revealCooldown && (UserDefaults.standard.object(forKey: "hoverReveal") as? Bool ?? true) {
-                if let since = menuSince { if Date().timeIntervalSince(since) > 0.3 { show(pinned: false) } }
-                else { menuSince = Date() }
-            } else { menuSince = nil }
+            if ropeVisibility.shouldReveal(inMenuBar: inMenuBar, mousePressed: pressed,
+                enabled: UserDefaults.standard.object(forKey: "hoverReveal") as? Bool ?? true) {
+                show(pinned: false)
+            }
             return
         }
         if pressed && !overCard && panel.ignoresMouseEvents { pinned = false; enteredPanel = true }
         let inside = mouse.x >= panel.frame.minX && mouse.x <= panel.frame.maxX && mouse.y >= panel.frame.minY && mouse.y <= screen.frame.maxY
         if inside { outsideSince = nil; if !inMenuBar { enteredPanel = true } }
         else if !pinned || enteredPanel {
-            if let since = outsideSince { if Date().timeIntervalSince(since) > 0.55 { tuck() } }
+            if let since = outsideSince { if Date().timeIntervalSince(since) > 0.55 { tuck(automatic: true) } }
             else { outsideSince = Date() }
         }
     }
