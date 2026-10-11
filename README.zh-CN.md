@@ -30,6 +30,12 @@
 
 绳上便笺使用 **Swift、SwiftUI 和 AppKit** 构建。无需账户，便笺和图片保存在本机。
 
+## 看看实际操作
+
+[![绳上便笺演示：在真实 macOS 桌面上取下便笺、查看内容，再挂回绳子。](Assets/demo/string-notes.gif)](https://github.com/TD21forever/string-notes/raw/refs/heads/main/Assets/demo/string-notes.mp4)
+
+[观看或下载带音乐的完整视频（约 16 秒）](https://github.com/TD21forever/string-notes/raw/refs/heads/main/Assets/demo/string-notes.mp4)。使用真实 Mac 录屏，上方为静音动图预览。[素材署名](Assets/demo/README.md)。
+
 ## 一图上手
 
 ![绳上便笺真实使用界面：随手记、取下来写、挂回去、放心关](Assets/screenshots/user-guide.zh-CN.jpg)

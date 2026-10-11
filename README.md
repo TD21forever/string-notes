@@ -32,6 +32,12 @@ Built with **Swift, SwiftUI, and AppKit**. No account required. Your notes and i
 
 > The app supports English and Simplified Chinese. It follows your system language by default; change it in Settings → General → Language and restart the app. Existing notes are never translated.
 
+## See it in action
+
+[![String Notes demo: pull a note down, view it, and hang it back on a real macOS desktop.](Assets/demo/string-notes.gif)](https://github.com/TD21forever/string-notes/raw/refs/heads/main/Assets/demo/string-notes.mp4)
+
+[Watch or download the full 16-second video with music](https://github.com/TD21forever/string-notes/raw/refs/heads/main/Assets/demo/string-notes.mp4). Recorded on a real Mac; the demo uses the Chinese interface. [Media credits](Assets/demo/README.md).
+
 ## At a glance
 
 ![String Notes in use: create a note, pull it down to write, hang it back, and save on close. Screenshot of the Chinese app interface.](Assets/screenshots/user-guide.zh-CN.jpg)
