@@ -13,7 +13,7 @@
 <p align="center">
   <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.11.0"><img src="https://img.shields.io/badge/version-0.11.0%20preview-e5b85b" alt="0.11.0 preview"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13+ build target">
-  <img src="https://img.shields.io/badge/Apple%20Silicon-arm64-555555" alt="Apple Silicon">
+  <img src="https://img.shields.io/badge/Apple%20Silicon%20%2B%20Intel-arm64%20%7C%20x86__64-555555" alt="Apple Silicon + Intel">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
 </p>
 
@@ -56,15 +56,15 @@ A real screenshot with four quick-start notes. From left to right:
 
 ## Install
 
-The current preview is available for **Apple Silicon Macs (M-series chips)**. The minimum build target is **macOS 13 Ventura**; compatibility has not yet been tested on a device running that minimum version. An Intel download is not available yet.
+Available for **Apple Silicon (M-series)** and **Intel Macs**, with a minimum build target of **macOS 13 Ventura**. Intel builds are checked in GitHub’s Intel macOS environment; interactive use on an Intel Mac and the minimum macOS version still need broader testing.
 
 ### Download DMG
 
-1. Download [StringNotes-0.11.0-arm64.dmg](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.dmg).
+1. Download the DMG for your Mac: [Apple Silicon](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.dmg) or [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-x86_64.dmg).
 2. Open the disk image and drag **绳上便笺.app** to **Applications**.
 3. Open the app from Applications. When upgrading, quit the old app before replacing it. Your existing notes stay on this Mac.
 
-Prefer a ZIP? Download [StringNotes-0.11.0-arm64.zip](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.zip), unzip it, and move the app to Applications. Both formats contain the same app. SHA-256 checksum files are available on the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0).
+Prefer a ZIP? Download [StringNotes-0.11.0-arm64.zip](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.zip), unzip it, and move the app to Applications. An [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-x86_64.zip) is also available. Both formats contain the same app. SHA-256 checksum files are available on the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0).
 
 ### Homebrew
 
@@ -200,7 +200,7 @@ python3 tests/check-store.py
 
 The app is written to `build/`; release files are written to `dist/`. [VERSION](VERSION) sets the version number.
 
-The default build is `arm64`. Set `STRING_NOTES_ARCH=x86_64` to try an Intel build; the current release does not include unverified Intel artifacts. After changing the icons, run `./scripts/build-icons.sh` to regenerate the icon resources.
+The default build is `arm64`. Use `STRING_NOTES_ARCH=x86_64 ./scripts/package.sh` for Intel, then `STRING_NOTES_ARCH=x86_64 ./scripts/package-dmg.sh` for its DMG. Homebrew selects the matching architecture automatically. After changing the icons, run `./scripts/build-icons.sh` to regenerate the icon resources.
 
 GitHub Actions runs the isolated tests and packages the app. Pushing a `v*` tag that matches `VERSION` creates a preview release. Update the version and checksum in the [Homebrew tap](https://github.com/TD21forever/homebrew-tap) after publishing.
 

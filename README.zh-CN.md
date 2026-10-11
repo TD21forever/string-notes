@@ -15,7 +15,7 @@
 <p align="center">
   <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.11.0"><img src="https://img.shields.io/badge/version-0.11.0%20preview-e5b85b" alt="0.11.0 测试版"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13 及以上构建目标">
-  <img src="https://img.shields.io/badge/Apple%20Silicon-arm64-555555" alt="Apple Silicon">
+  <img src="https://img.shields.io/badge/Apple%20Silicon%20%2B%20Intel-arm64%20%7C%20x86__64-555555" alt="Apple Silicon + Intel">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
 </p>
 
@@ -54,15 +54,15 @@
 
 ## 安装
 
-目前提供 **Apple Silicon（M 系列芯片）测试版**。最低构建目标为 **macOS 13 Ventura**，最低版本设备尚未实机验证；暂未发布 Intel 安装包。
+提供 **Apple Silicon（M 系列）和 Intel Mac** 安装包，最低构建目标为 **macOS 13 Ventura**。Intel 构建在 GitHub 的 Intel macOS 环境中检查；Intel 实机交互及最低系统版本仍需更多验证。
 
 ### 下载 DMG
 
-1. 下载 [StringNotes-0.11.0-arm64.dmg](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.dmg)。
+1. 根据芯片下载 DMG：[Apple Silicon（M 系列）](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.dmg) 或 [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-x86_64.dmg)。
 2. 打开磁盘映像，将 **绳上便笺.app** 拖到 **Applications（应用程序）**。
 3. 从「应用程序」打开。升级时请先退出旧版，再替换应用；已有便笺会保留。
 
-也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.zip)，解压后将应用移到「应用程序」。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0)同时提供 SHA-256 校验文件。
+也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-arm64.zip)，解压后将应用移到「应用程序」。另提供 [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.11.0/StringNotes-0.11.0-x86_64.zip)。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.0)同时提供 SHA-256 校验文件。
 
 ### Homebrew
 
@@ -200,7 +200,7 @@ python3 tests/check-store.py
 
 应用输出在 `build/`，发行文件输出在 `dist/`。版本号由 [VERSION](VERSION) 决定。
 
-默认构建 `arm64`。设置 `STRING_NOTES_ARCH=x86_64` 可尝试 Intel 构建，但当前发行不包含未经验证的 Intel 产物。修改图标后可运行 `./scripts/build-icons.sh` 重新生成图标资源。
+默认构建 `arm64`。执行 `STRING_NOTES_ARCH=x86_64 ./scripts/package.sh` 生成 Intel ZIP，再执行 `STRING_NOTES_ARCH=x86_64 ./scripts/package-dmg.sh` 生成对应 DMG。Homebrew 会自动选择匹配芯片的版本。修改图标后可运行 `./scripts/build-icons.sh` 重新生成图标资源。
 
 GitHub Actions 会执行隔离测试和打包。推送与 `VERSION` 匹配的 `v*` 标签会生成测试版 Release；发布后需同步更新 [Homebrew Tap](https://github.com/TD21forever/homebrew-tap) 的版本与校验和。
 
