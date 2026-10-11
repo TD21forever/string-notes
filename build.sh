@@ -3,6 +3,7 @@ set -eu
 cd "$(dirname "$0")"
 VERSION="$(cat VERSION)"
 ARCH="${STRING_NOTES_ARCH:-arm64}"
+case "$ARCH" in arm64|x86_64) ;; *) print -u2 "Unsupported architecture: $ARCH"; exit 1 ;; esac
 MIN_MACOS="13.0"
 APP="$PWD/build/绳上便笺.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"

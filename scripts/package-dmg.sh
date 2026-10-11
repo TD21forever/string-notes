@@ -6,6 +6,7 @@ ARCH="${STRING_NOTES_ARCH:-arm64}"
 APP="${1:-$PWD/build/绳上便笺.app}"
 [[ -d "$APP" ]]
 codesign --verify --deep --strict "$APP"
+[[ "$(lipo -archs "$APP/Contents/MacOS/StringNotes")" == "$ARCH" ]]
 STAGE="$(mktemp -d "${TMPDIR:-/tmp}/string-notes-dmg.XXXXXX")"
 trap 'rm -rf "$STAGE"' EXIT
 ditto "$APP" "$STAGE/绳上便笺.app"

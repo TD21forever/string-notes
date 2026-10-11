@@ -7,12 +7,23 @@ permissions:
   contents: read
 jobs:
   check:
-    runs-on: macos-14
+    strategy:
+      matrix:
+        include:
+          - runner: macos-14
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x86_64
+    runs-on: ${{ matrix.runner }}
+    env:
+      STRING_NOTES_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v4
       - name: Verify isolated storage and editor checks
         run: python3 tests/check-store.py
       - name: Verify updates and localization
         run: python3 tests/check-updates.py
-      - name: Build and package arm64 app
-        run: ./scripts/package.sh
+      - name: Build and verify architecture
+        run: |
+          ./scripts/package.sh
+          test "$(lipo -archs 'build/绳上便笺.app/Contents/MacOS/StringNotes')" = "$STRING_NOTES_ARCH"

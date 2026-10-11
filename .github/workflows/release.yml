@@ -1,4 +1,4 @@
-name: Release preview
+name: Release
 on:
   push:
     tags: ['v*']
@@ -16,14 +16,17 @@ jobs:
         run: |
           python3 tests/check-store.py
           python3 tests/check-updates.py
-      - name: Build arm64 distribution
+      - name: Build Apple Silicon and Intel distributions
         run: |
-          ./scripts/package.sh
-          ./scripts/package-dmg.sh
-      - name: Create preview release if absent
+          for arch in arm64 x86_64; do
+            STRING_NOTES_ARCH="$arch" ./scripts/package.sh
+            test "$(lipo -archs 'build/绳上便笺.app/Contents/MacOS/StringNotes')" = "$arch"
+            STRING_NOTES_ARCH="$arch" ./scripts/package-dmg.sh
+          done
+      - name: Create release if absent
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.dmg dist/*.sha256 --verify-tag --prerelease --notes-file "release-notes/$GITHUB_REF_NAME.md" --title "绳上便笺 $GITHUB_REF_NAME · Apple Silicon Preview"
+            gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.dmg dist/*.sha256 --verify-tag --latest --notes-file "release-notes/$GITHUB_REF_NAME.md" --title "绳上便笺 $GITHUB_REF_NAME · macOS"
           fi
