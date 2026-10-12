@@ -19,6 +19,7 @@ jobs:
           python3 tests/check-store.py
           python3 tests/check-updates.py
           python3 tests/check-update-save.py
+          python3 tests/check-settings.py
           python3 tests/check-rope.py
       - name: Build Apple Silicon and Intel distributions
         run: |

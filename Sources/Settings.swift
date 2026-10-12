@@ -46,21 +46,21 @@ struct SettingRow<Content: View>: View {
 struct SettingsView: View {
     @ObservedObject var store: Store
     @State private var page: SettingsPage = .general
-    @AppStorage("ropeDisplay") private var ropeDisplay = "mouse"
-    @AppStorage("ropeDisplayName") private var ropeDisplayName = ""
-    @AppStorage("ropeAutoHide") private var ropeAutoHide = true
+    @SettingStorage("ropeDisplay") private var ropeDisplay = "mouse"
+    @SettingStorage("ropeDisplayName") private var ropeDisplayName = ""
+    @SettingStorage("ropeAutoHide") private var ropeAutoHide = true
     @ObservedObject private var displays = DisplayPreferences.shared
-    @AppStorage("hoverReveal") private var hoverReveal = true
-    @AppStorage("reduceMotion") private var reduceMotion = false
-    @AppStorage("defaultPinned") private var defaultPinned = false
-    @AppStorage("defaultColor") private var defaultColor = 0
-    @AppStorage("noteFont") private var noteFont = "system"
-    @AppStorage("noteFontSize") private var noteFontSize = 17.0
-    @AppStorage("markdownEnabled") private var markdownEnabled = true
-    @AppStorage("imageSizing") private var imageSizing = "fixed"
+    @SettingStorage("hoverReveal") private var hoverReveal = true
+    @SettingStorage("reduceMotion") private var reduceMotion = false
+    @SettingStorage("defaultPinned") private var defaultPinned = false
+    @SettingStorage("defaultColor") private var defaultColor = 0
+    @SettingStorage("noteFont") private var noteFont = "system"
+    @SettingStorage("noteFontSize") private var noteFontSize = 17.0
+    @SettingStorage("markdownEnabled") private var markdownEnabled = true
+    @SettingStorage("imageSizing") private var imageSizing = "fixed"
     @State private var result = ""
-    @AppStorage("appLanguage") private var appLanguage = "system"
-    @AppStorage("SUEnableAutomaticChecks") private var automaticUpdateChecks = true
+    @SettingStorage("appLanguage") private var appLanguage = "system"
+    @SettingStorage("SUEnableAutomaticChecks") private var automaticUpdateChecks = true
     @ObservedObject private var updates = UpdateChecker.shared
     init(store: Store, showingUpdates: Bool = false) {
         self.store = store

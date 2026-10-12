@@ -27,6 +27,8 @@ jobs:
         run: python3 tests/check-updates.py
       - name: Verify update save protection
         run: python3 tests/check-update-save.py
+      - name: Verify settings state refresh
+        run: python3 tests/check-settings.py
       - name: Verify rope visibility
         run: python3 tests/check-rope.py
       - name: Build and verify architecture

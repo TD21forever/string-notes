@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.13.0"><img src="https://img.shields.io/badge/version-0.13.0-e5b85b" alt="0.13.0"></a>
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.13.1"><img src="https://img.shields.io/badge/version-0.13.1-e5b85b" alt="0.13.1"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13 及以上构建目标">
   <img src="https://img.shields.io/badge/Apple%20Silicon%20%2B%20Intel-arm64%20%7C%20x86__64-555555" alt="Apple Silicon + Intel">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
@@ -64,11 +64,11 @@
 
 ### 下载 DMG
 
-1. 根据芯片下载 DMG：[Apple Silicon（M 系列）](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-arm64.dmg) 或 [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-x86_64.dmg)。
+1. 根据芯片下载 DMG：[Apple Silicon（M 系列）](https://github.com/TD21forever/string-notes/releases/download/v0.13.1/StringNotes-0.13.1-arm64.dmg) 或 [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.13.1/StringNotes-0.13.1-x86_64.dmg)。
 2. 打开磁盘映像，将 **绳上便笺.app** 拖到 **Applications（应用程序）**。
 3. 从「应用程序」打开。升级时请先退出旧版，再替换应用；已有便笺会保留。
 
-也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-arm64.zip)，解压后将应用移到「应用程序」。另提供 [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-x86_64.zip)。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.13.0)同时提供 SHA-256 校验文件。
+也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.13.1/StringNotes-0.13.1-arm64.zip)，解压后将应用移到「应用程序」。另提供 [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.13.1/StringNotes-0.13.1-x86_64.zip)。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.13.1)同时提供 SHA-256 校验文件。
 
 ### Homebrew
 
@@ -178,7 +178,7 @@ brew uninstall --cask string-notes
 
 ## 测试版与反馈
 
-目前是 **0.13.0**。显示器选择与断开回退、自由摆放与撤销、自动收起策略、存储、备份合并、损坏数据保护、图片持久化与缩放、Markdown、排序数据逻辑和多编辑会话已有隔离测试；单屏原生窗口检查通过，真实外接屏插拔尚未实测；不同 macOS、显示器、中文输入法和 Space 下的界面体验仍需继续验证。
+目前是 **0.13.1**。显示器选择与断开回退、自由摆放与撤销、自动收起策略、存储、备份合并、损坏数据保护、图片持久化与缩放、Markdown、排序数据逻辑和多编辑会话已有隔离测试；单屏原生窗口检查通过，真实外接屏插拔尚未实测；不同 macOS、显示器、中文输入法和 Space 下的界面体验仍需继续验证。
 
 便笺盒现仅保留便笺和归档，恢复草稿合并展示在便笺列表，不再单列草稿或回收站。删除记录仍保存在本地数据和备份中，但当前界面没有恢复入口；可能还会用到的便笺建议归档。
 
