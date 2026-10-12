@@ -11,6 +11,13 @@ enum AppLanguage {
         language == "en" ? (english[key] ?? key) : key
     }
     static let english: [String: String] = [
+        "更新器无法启动，请重试或手动下载新版。": "The updater could not start. Retry or download the update manually.",
+        "发现新版后，可在应用内下载安装并重启。更新前会保存所有便笺。": "Download and install updates without leaving the app. All notes are saved before restarting.",
+        "自动检查更新": "Automatically check for updates",
+        "当前版本": "Current version",
+        "手动下载与发布说明": "Manual download and release notes",
+        "请先完成输入法选词": "Finish composing your text first",
+        "为避免丢失正在输入的文字，请完成选词后再次更新或退出。": "To keep your text safe, finish the input method composition, then update or quit again.",
         "绳子所在的显示器": "String display",
         "显示位置": "Show on",
         "跟随鼠标": "Follow pointer",
@@ -148,7 +155,6 @@ enum AppLanguage {
         "更新": "Updates",
         "检查更新": "Check for Updates",
         "启动时自动检查更新": "Check automatically on launch",
-        "每天最多检查一次。安装更新需要下载新版本并手动替换应用。": "Checks at most once a day. Download the new version and replace the app to install it.",
         "尚未检查更新": "Not checked yet",
         "正在检查更新…": "Checking for updates…",
         "你已是最新版本": "You're up to date",
@@ -156,7 +162,6 @@ enum AppLanguage {
         "查看发布说明": "Release Notes",
         "下载安装包": "Download Update",
         "此版本没有适用于这台 Mac 的安装包，请查看发布说明。": "No compatible download is available for this Mac. See the release notes.",
-        "更新从 GitHub 下载；退出应用后，将新版本替换到“应用程序”。Homebrew 用户也可使用 brew upgrade。": "Updates download from GitHub. Quit the app, then replace it in Applications. Homebrew users can also run brew upgrade.",
         "可用版本 %@": "Version %@ is available",
         "版本 %@ · 原生 macOS 应用": "Version %@ · Native macOS app",
         "便笺 %d": "Notes %d",

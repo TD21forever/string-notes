@@ -9,6 +9,8 @@ jobs:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
+      - name: Prepare verified update framework
+        run: ./scripts/prepare-sparkle.sh
       - name: Match version to tag
         shell: bash
         run: test "${GITHUB_REF_NAME#v}" = "$(cat VERSION)"
@@ -16,6 +18,7 @@ jobs:
         run: |
           python3 tests/check-store.py
           python3 tests/check-updates.py
+          python3 tests/check-update-save.py
           python3 tests/check-rope.py
       - name: Build Apple Silicon and Intel distributions
         run: |
@@ -24,10 +27,17 @@ jobs:
             test "$(lipo -archs 'build/绳上便笺.app/Contents/MacOS/StringNotes')" = "$arch"
             STRING_NOTES_ARCH="$arch" ./scripts/package-dmg.sh
           done
+      - name: Sign update archives and feeds
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          test -n "$SPARKLE_PRIVATE_KEY" || { echo "Missing SPARKLE_PRIVATE_KEY repository secret"; exit 1; }
+          python3 scripts/sign-appcasts.py
+          swift scripts/verify-appcasts.swift updates/public-key.txt dist "$(cat VERSION)"
       - name: Create release if absent
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.dmg dist/*.sha256 --verify-tag --latest --notes-file "release-notes/$GITHUB_REF_NAME.md" --title "绳上便笺 $GITHUB_REF_NAME · macOS"
+            gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.dmg dist/*.sha256 dist/appcast-*.xml --verify-tag --latest --notes-file "release-notes/$GITHUB_REF_NAME.md" --title "绳上便笺 $GITHUB_REF_NAME · macOS"
           fi

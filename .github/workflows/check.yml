@@ -19,10 +19,14 @@ jobs:
       STRING_NOTES_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v4
+      - name: Prepare verified update framework
+        run: ./scripts/prepare-sparkle.sh
       - name: Verify isolated storage and editor checks
         run: python3 tests/check-store.py
       - name: Verify updates and localization
         run: python3 tests/check-updates.py
+      - name: Verify update save protection
+        run: python3 tests/check-update-save.py
       - name: Verify rope visibility
         run: python3 tests/check-rope.py
       - name: Build and verify architecture

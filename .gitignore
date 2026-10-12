@@ -5,3 +5,5 @@ dist/
 *.p12
 *.mobileprovision
 .env*
+.build/
+*.private-key

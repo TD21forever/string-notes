@@ -464,9 +464,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             }
         }
         Shortcuts.shared.start()
-        UpdateChecker.shared.checkAutomatically()
+        UpdateChecker.shared.willRelaunch = { [weak self] in
+            guard let self = self else { return }
+            UserDefaults.standard.set(self.editors.keys.map { $0.uuidString }, forKey: "reopenNotesAfterUpdate")
+        }
+        UpdateChecker.shared.start()
         scheduleTracking()
         show()
+        let reopen = UserDefaults.standard.stringArray(forKey: "reopenNotesAfterUpdate") ?? []
+        UserDefaults.standard.removeObject(forKey: "reopenNotesAfterUpdate")
+        for id in reopen {
+            if let note = store.libraryNotes.first(where: { $0.id.uuidString == id }) { openEditor(note) }
+        }
     }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { show(); return true }
     @objc func toggle() {
@@ -493,6 +502,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         var failed: NSWindow?
         for entry in editors.values {
+            if let view = entry.window.firstResponder as? NSTextView, view.hasMarkedText() {
+                entry.window.makeKeyAndOrderFront(nil)
+                let alert = NSAlert()
+                alert.messageText = L("请先完成输入法选词")
+                alert.informativeText = L("为避免丢失正在输入的文字，请完成选词后再次更新或退出。")
+                alert.runModal()
+                return .terminateCancel
+            }
             if !entry.session.flush(store) { failed = entry.window }
         }
         if let failed = failed { failed.makeKeyAndOrderFront(nil); return .terminateCancel }
@@ -745,6 +762,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         editors.removeValue(forKey: id)?.session.cancelPending()
     }
 
+}
+// Sparkle's native dialogs use the same language choice as the note UI.
+if let language = UserDefaults.standard.string(forKey: "appLanguage"), ["en", "zh-Hans"].contains(language) {
+    UserDefaults.standard.set([language], forKey: "AppleLanguages")
+} else {
+    UserDefaults.standard.removeObject(forKey: "AppleLanguages")
 }
 let app = NSApplication.shared
 let delegate = AppDelegate()

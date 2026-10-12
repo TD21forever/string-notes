@@ -60,7 +60,7 @@ struct SettingsView: View {
     @AppStorage("imageSizing") private var imageSizing = "fixed"
     @State private var result = ""
     @AppStorage("appLanguage") private var appLanguage = "system"
-    @AppStorage("automaticUpdateChecks") private var automaticUpdateChecks = true
+    @AppStorage("SUEnableAutomaticChecks") private var automaticUpdateChecks = true
     @ObservedObject private var updates = UpdateChecker.shared
     init(store: Store, showingUpdates: Bool = false) {
         self.store = store
@@ -227,39 +227,24 @@ struct UpdateSettings: View {
     @ObservedObject var updates: UpdateChecker
     @Binding var automaticChecks: Bool
     var body: some View {
-        SettingsGroup(title: L("更新"), caption: L("每天最多检查一次。安装更新需要下载新版本并手动替换应用。")) {
-            SettingRow(title: L("启动时自动检查更新")) {
-                Toggle(L("启动时自动检查更新"), isOn: $automaticChecks).labelsHidden().toggleStyle(.switch).controlSize(.small)
+        SettingsGroup(title: L("更新"), caption: L("发现新版后，可在应用内下载安装并重启。更新前会保存所有便笺。")) {
+            SettingRow(title: L("自动检查更新")) {
+                Toggle(L("自动检查更新"), isOn: $automaticChecks).labelsHidden().toggleStyle(.switch).controlSize(.small)
+                    .onChange(of: automaticChecks) { updates.setAutomaticChecks($0) }
             }
             Divider().padding(.leading, 14)
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text(status).font(.system(size: 12)).fixedSize(horizontal: false, vertical: true)
-                    Spacer()
-                    Button(L("检查更新")) { updates.check() }.disabled(updates.state == .checking)
-                }
-                if case let .available(release) = updates.state {
-                    HStack {
-                        if let url = release.downloadURL(architecture: AppVersion.architecture) {
-                            Link(L("下载安装包"), destination: url)
-                        }
-                        if let url = release.pageURL { Link(L("查看发布说明"), destination: url) }
-                    }
-                    Text(L(release.downloadURL(architecture: AppVersion.architecture) == nil
-                           ? "此版本没有适用于这台 Mac 的安装包，请查看发布说明。"
-                           : "更新从 GitHub 下载；退出应用后，将新版本替换到“应用程序”。Homebrew 用户也可使用 brew upgrade。"))
-                        .font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                }
+            SettingRow(title: L("当前版本")) {
+                Text(AppVersion.current).foregroundStyle(.secondary)
+                Button(L("检查更新…")) { updates.check() }.disabled(!updates.canCheck && updates.error.isEmpty)
+            }
+            if !updates.error.isEmpty {
+                Text(updates.error).font(.caption).foregroundStyle(.red).padding(14)
+            }
+            HStack {
+                Spacer()
+                Link(L("手动下载与发布说明"), destination: URL(string: "https://github.com/TD21forever/string-notes/releases/latest")!)
+                    .font(.caption)
             }.padding(14)
-        }
-    }
-    private var status: String {
-        switch updates.state {
-        case .idle: return L("尚未检查更新")
-        case .checking: return L("正在检查更新…")
-        case .current: return L("你已是最新版本")
-        case .failed: return L("无法检查更新，请检查网络或稍后重试。")
-        case let .available(release): return L("可用版本 %@", release.tag_name)
         }
     }
 }

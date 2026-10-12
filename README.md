@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.12.0"><img src="https://img.shields.io/badge/version-0.12.0-e5b85b" alt="0.12.0"></a>
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.13.0"><img src="https://img.shields.io/badge/version-0.13.0-e5b85b" alt="0.13.0"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13+ build target">
   <img src="https://img.shields.io/badge/Apple%20Silicon%20%2B%20Intel-arm64%20%7C%20x86__64-555555" alt="Apple Silicon + Intel">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
@@ -66,11 +66,11 @@ Available for **Apple Silicon (M-series)** and **Intel Macs**, with a minimum bu
 
 ### Download DMG
 
-1. Download the DMG for your Mac: [Apple Silicon](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-arm64.dmg) or [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-x86_64.dmg).
+1. Download the DMG for your Mac: [Apple Silicon](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-arm64.dmg) or [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-x86_64.dmg).
 2. Open the disk image and drag **绳上便笺.app** to **Applications**.
 3. Open the app from Applications. When upgrading, quit the old app before replacing it. Your existing notes stay on this Mac.
 
-Prefer a ZIP? Download [StringNotes-0.12.0-arm64.zip](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-arm64.zip), unzip it, and move the app to Applications. An [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-x86_64.zip) is also available. Both formats contain the same app. SHA-256 checksum files are available on the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.12.0).
+Prefer a ZIP? Download [StringNotes-0.13.0-arm64.zip](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-arm64.zip), unzip it, and move the app to Applications. An [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-x86_64.zip) is also available. Both formats contain the same app. SHA-256 checksum files are available on the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.13.0).
 
 ### Homebrew
 
@@ -180,11 +180,13 @@ Importing a backup merges new notes. When an ID already exists, the local versio
 
 ## Preview status and feedback
 
-Current version: **0.12.0**. Isolated tests cover display selection and disconnected-display fallback, free placement and undo, auto-hide behavior, storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. Native window checks passed on a single display. Physical external-display unplug/reconnect testing remains outstanding; UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
+Current version: **0.13.0**. Isolated tests cover display selection and disconnected-display fallback, free placement and undo, auto-hide behavior, storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. Native window checks passed on a single display. Physical external-display unplug/reconnect testing remains outstanding; UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
 
 The library now has only Notes and Archive. Draft recovery is merged into the note list; there is no separate Drafts or Trash tab. Deleted records remain in local storage and backups, but there is currently no restore action in the UI. Archive notes you may want to revisit.
 
-Choose **Check for Updates…** from the menu bar icon to check GitHub releases, including previews. Settings → Data & About offers release notes and the download for your Mac. Automatic checks happen on launch at most once per day and can be disabled. After downloading, quit the app and replace it in Applications; this does not install updates automatically. Homebrew users can keep using `brew upgrade --cask TD21forever/tap/string-notes`.
+Choose **Check for Updates…** from the menu bar icon or Settings → Data & About. Sparkle checks the stable release feed for your Mac, downloads and verifies signed updates, then installs and relaunches the app. All editors are saved before quitting; a save failure or unfinished input-method composition blocks quitting. Open notes are restored after the update. Automatic checks can be disabled; installation requires your confirmation. Manual download remains a fallback.
+
+**Upgrading from 0.12.0 or earlier requires one final manual install or Homebrew upgrade**, because those versions only open a download link. The new updater works after installing a version that includes it. For Homebrew installations, in-app updates may leave Homebrew’s receipt at the previously installed version; `brew upgrade --cask TD21forever/tap/string-notes` remains supported. Updates do not change the Apple notarization status.
 
 Automatic cloud sync, automatic version history, and a notarized distribution are not available yet.
 
@@ -195,7 +197,7 @@ Found a problem or have an idea? Open an [issue](https://github.com/TD21forever/
 <details>
 <summary>Get the source, build, and test</summary>
 
-Requires macOS and Xcode Command Line Tools.
+Requires macOS and Xcode Command Line Tools. The first build downloads pinned Sparkle 2.10.0 and verifies its SHA-256. See [update signing](updates/README.md) for release setup.
 
 ```bash
 git clone https://github.com/TD21forever/string-notes.git

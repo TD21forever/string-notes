@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.12.0"><img src="https://img.shields.io/badge/version-0.12.0-e5b85b" alt="0.12.0"></a>
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.13.0"><img src="https://img.shields.io/badge/version-0.13.0-e5b85b" alt="0.13.0"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13 及以上构建目标">
   <img src="https://img.shields.io/badge/Apple%20Silicon%20%2B%20Intel-arm64%20%7C%20x86__64-555555" alt="Apple Silicon + Intel">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
@@ -64,11 +64,11 @@
 
 ### 下载 DMG
 
-1. 根据芯片下载 DMG：[Apple Silicon（M 系列）](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-arm64.dmg) 或 [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-x86_64.dmg)。
+1. 根据芯片下载 DMG：[Apple Silicon（M 系列）](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-arm64.dmg) 或 [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-x86_64.dmg)。
 2. 打开磁盘映像，将 **绳上便笺.app** 拖到 **Applications（应用程序）**。
 3. 从「应用程序」打开。升级时请先退出旧版，再替换应用；已有便笺会保留。
 
-也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-arm64.zip)，解压后将应用移到「应用程序」。另提供 [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-x86_64.zip)。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.12.0)同时提供 SHA-256 校验文件。
+也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-arm64.zip)，解压后将应用移到「应用程序」。另提供 [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.13.0/StringNotes-0.13.0-x86_64.zip)。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.13.0)同时提供 SHA-256 校验文件。
 
 ### Homebrew
 
@@ -178,13 +178,15 @@ brew uninstall --cask string-notes
 
 ## 测试版与反馈
 
-目前是 **0.12.0**。显示器选择与断开回退、自由摆放与撤销、自动收起策略、存储、备份合并、损坏数据保护、图片持久化与缩放、Markdown、排序数据逻辑和多编辑会话已有隔离测试；单屏原生窗口检查通过，真实外接屏插拔尚未实测；不同 macOS、显示器、中文输入法和 Space 下的界面体验仍需继续验证。
+目前是 **0.13.0**。显示器选择与断开回退、自由摆放与撤销、自动收起策略、存储、备份合并、损坏数据保护、图片持久化与缩放、Markdown、排序数据逻辑和多编辑会话已有隔离测试；单屏原生窗口检查通过，真实外接屏插拔尚未实测；不同 macOS、显示器、中文输入法和 Space 下的界面体验仍需继续验证。
 
 便笺盒现仅保留便笺和归档，恢复草稿合并展示在便笺列表，不再单列草稿或回收站。删除记录仍保存在本地数据和备份中，但当前界面没有恢复入口；可能还会用到的便笺建议归档。
 
 支持中文和 English，默认跟随系统。可在「设置 → 通用 → 语言」选择，重启应用后生效；已有便笺内容不会被翻译。
 
-菜单栏图标菜单中的「检查更新…」会检查 GitHub Release（含预览版）。设置中可查看发布说明并下载对应 Mac 架构的安装包；启动时自动检查每天最多一次，可以关闭。下载后退出应用并替换「应用程序」中的旧版本，目前不会自动安装。Homebrew 用户仍可执行 `brew upgrade --cask TD21forever/tap/string-notes`。
+从菜单栏菜单或「设置 → 数据与关于」选择「检查更新…」。Sparkle 会检查适合当前芯片的正式版本，下载并验证数字签名，随后安装并重新打开应用。退出前保存所有便笺；保存失败或输入法尚在选词时阻止退出。更新后恢复打开的便笺。自动检查可以关闭，安装需要用户确认，手动下载保留为备用入口。
+
+**0.12.0 及更早版本仍需最后手动安装或通过 Homebrew 升级一次**，因为这些版本只有下载链接。装上带新更新器的版本后，后续更新可在应用内完成。Homebrew 安装的应用自更新后，其安装记录可能仍显示旧版本，仍可使用 `brew upgrade --cask TD21forever/tap/string-notes`。此功能不会改变 Apple 公证状态。
 
 当前尚未提供自动云同步、自动版本历史和公证发行包。
 
@@ -215,7 +217,7 @@ python3 tests/check-store.py
 
 默认构建 `arm64`。执行 `STRING_NOTES_ARCH=x86_64 ./scripts/package.sh` 生成 Intel ZIP，再执行 `STRING_NOTES_ARCH=x86_64 ./scripts/package-dmg.sh` 生成对应 DMG。Homebrew 会自动选择匹配芯片的版本。修改图标后可运行 `./scripts/build-icons.sh` 重新生成图标资源。
 
-GitHub Actions 会执行隔离测试和打包。推送与 `VERSION` 匹配的 `v*` 标签会生成 Latest Release；发布后需同步更新 [Homebrew Tap](https://github.com/TD21forever/homebrew-tap) 的版本与校验和。
+首次构建会下载固定版本 Sparkle 2.10.0 并校验 SHA-256。[更新签名说明](updates/README.md)介绍本地钥匙串与 GitHub 配置。GitHub Actions 会执行隔离测试、打包并签名更新源。推送与 `VERSION` 匹配的 `v*` 标签会生成 Latest Release；发布后需同步更新 [Homebrew Tap](https://github.com/TD21forever/homebrew-tap) 的版本与校验和。
 
 </details>
 
