@@ -54,7 +54,7 @@ struct CardDragSurface: NSViewRepresentable {
         view.clicked = clicked; view.moved = moved; view.dropped = dropped
         view.setAccessibilityElement(true); view.setAccessibilityRole(.button)
         view.setAccessibilityLabel(title)
-        view.setAccessibilityHelp(L("点击打开；向下拖取下，沿绳拖动排序"))
+        view.setAccessibilityHelp(L("点击打开；向下拖取下，沿绳拖动摆放"))
     }
 }
 

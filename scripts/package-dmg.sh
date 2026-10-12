@@ -13,10 +13,10 @@ ditto "$APP" "$STAGE/绳上便笺.app"
 ln -s /Applications "$STAGE/Applications"
 cat > "$STAGE/安装说明 - Read Me.txt" <<'TEXT'
 将「绳上便笺.app」拖到 Applications 后打开。
-此预览版尚未公证；若 macOS 阻止打开，请在系统设置 → 隐私与安全中查看提示。
+此版本尚未公证；若 macOS 阻止打开，请在系统设置 → 隐私与安全中查看提示。
 
 Drag 绳上便笺.app to Applications, then open it.
-This preview is not notarized. If macOS blocks it, check System Settings → Privacy & Security.
+This release is not notarized. If macOS blocks it, check System Settings → Privacy & Security.
 TEXT
 mkdir -p dist
 hdiutil create -volname "String Notes $VERSION" -srcfolder "$STAGE" -ov -format UDZO "dist/StringNotes-$VERSION-$ARCH.dmg"

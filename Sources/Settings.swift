@@ -46,6 +46,10 @@ struct SettingRow<Content: View>: View {
 struct SettingsView: View {
     @ObservedObject var store: Store
     @State private var page: SettingsPage = .general
+    @AppStorage("ropeDisplay") private var ropeDisplay = "mouse"
+    @AppStorage("ropeDisplayName") private var ropeDisplayName = ""
+    @AppStorage("ropeAutoHide") private var ropeAutoHide = true
+    @ObservedObject private var displays = DisplayPreferences.shared
     @AppStorage("hoverReveal") private var hoverReveal = true
     @AppStorage("reduceMotion") private var reduceMotion = false
     @AppStorage("defaultPinned") private var defaultPinned = false
@@ -104,7 +108,27 @@ struct SettingsView: View {
                     }.labelsHidden().frame(width: 180)
                 }
             }
+            SettingsGroup(title: L("绳子所在的显示器"), caption: L("跟随鼠标仅在展开或拖回便笺时换屏。指定屏幕断开后暂用主显示器，重连后自动回到原屏幕。")) {
+                SettingRow(title: L("显示位置")) {
+                    Picker(L("显示位置"), selection: $ropeDisplay) {
+                        Text(L("跟随鼠标")).tag("mouse")
+                        Text(L("主显示器")).tag("main")
+                        ForEach(Array(displays.displays.enumerated()), id: \.element.id) { index, display in
+                            Text("\(display.name) · \(index + 1)").tag(display.id)
+                        }
+                        if ropeDisplay != "mouse" && ropeDisplay != "main" && !displays.displays.contains(where: { $0.id == ropeDisplay }) {
+                            Text(L("%@（未连接）", ropeDisplayName.isEmpty ? L("指定显示器") : ropeDisplayName)).tag(ropeDisplay)
+                        }
+                    }.labelsHidden().frame(width: 200)
+                        .onChange(of: ropeDisplay) { value in
+                            if let display = displays.displays.first(where: { $0.id == value }) { ropeDisplayName = display.name }
+                        }
+                }
+            }
             SettingsGroup(title: L("展开与收起"), caption: L("关闭悬停展开后，仍可点击菜单栏图标或使用全局快捷键。")) {
+                SettingRow(title: L("自动收起绳子")) { Toggle(L("自动收起绳子"), isOn: $ropeAutoHide).labelsHidden().toggleStyle(.switch).controlSize(.small) }
+                Text(L("关闭后绳子保持显示；仍可点击菜单栏图标手动收起。")).font(.system(size: 11)).foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 14).padding(.bottom, 12)
+                Divider().padding(.leading, 14)
                 SettingRow(title: L("悬停菜单栏时展开")) { Toggle(L("悬停菜单栏时展开"), isOn: $hoverReveal).labelsHidden().toggleStyle(.switch).controlSize(.small) }
             }
             SettingsGroup(title: L("窗口"), caption: L("只影响新建便笺。已有便笺可通过图钉单独调整。")) {

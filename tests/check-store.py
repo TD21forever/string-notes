@@ -164,6 +164,20 @@ check(hangingStore.place(hangingA.id, before: nil) && hangingStore.notes.map(\.i
 check(hangingStore.place(hangingA.id, before: hangingB.id) && hangingStore.notes.map(\.id) == [hangingA.id, hangingB.id, hangingC.id], "rope drop inserts before target")
 check(hangingStore.undoOrder() && hangingStore.notes.last?.id == hangingA.id, "rope reorder can undo")
 check(!hangingStore.place(hangingA.id, before: UUID()) && hangingStore.notes.count == 3, "invalid rope destination preserves notes")
+let oldLayout = hangingStore.book.ropePositions
+let newLayout = [hangingA.id.uuidString: 0.63, hangingB.id.uuidString: 0.2]
+check(hangingStore.place(hangingA.id, before: nil, positions: newLayout), "position change saves even without order change")
+check(Store(folder: root.appendingPathComponent("hanging"), seedWelcome: false).book.ropePositions == newLayout, "rope positions survive restart")
+var editedHanging = hangingA; editedHanging.text = "updated after dragging"
+check(hangingStore.autoSave(editedHanging) && hangingStore.book.ropePositions == newLayout, "editor autosave cannot overwrite placement")
+check(hangingStore.undoOrder() && hangingStore.book.ropePositions == oldLayout && hangingStore.notes.first(where: { $0.id == hangingA.id })?.text == editedHanging.text, "undo restores position without reverting newer text")
+check(hangingStore.place(hangingA.id, before: nil, positions: newLayout), "place again for backup")
+let positionBackup = try JSONEncoder().encode(hangingStore.book)
+let positionImport = Store(folder: root.appendingPathComponent("position-import"), seedWelcome: false)
+_ = try positionImport.importBackup(positionBackup)
+check(positionImport.book.ropePositions == newLayout, "backup import preserves new note positions")
+let beforeFailure = failed.book.ropePositions
+check(!failed.place(a.id, before: nil, positions: newLayout) && failed.book.ropePositions == beforeFailure, "invalid placement leaves layout intact")
 let sessionA = EditSession(Memo(text: "A"))
 let sessionB = EditSession(Memo(text: "B"))
 check(sessionA.flush(windowStore) && sessionB.flush(windowStore) && windowStore.notes.count == 2, "independent editor sessions persist separate notes")

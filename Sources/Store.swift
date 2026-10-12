@@ -11,6 +11,7 @@ struct Memo: Codable, Identifiable, Equatable {
 }
 struct RemovedMemo: Codable { var note: Memo; var index: Int }
 struct Notebook: Codable {
+    var ropePositions: [String: Double]? = nil
     var version = 1
     var notes: [Memo] = []
     var drafts: [Memo] = []
@@ -40,6 +41,7 @@ final class Store: ObservableObject {
     let file: URL
     private var blocked = false
     private var previousOrder: [Memo]?
+    private var previousPositions: [String: Double]?
     var canUndoOrder: Bool { previousOrder != nil }
     init(folder: URL? = nil, seedWelcome: Bool = true) {
         let folder = folder ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("StringNotes")
@@ -86,6 +88,8 @@ final class Store: ObservableObject {
               Set(incoming.drafts.map(\.id)).count == incoming.drafts.count else { throw CocoaError(.fileReadCorruptFile) }
         let known = Set(notes.map(\.id) + drafts.map(\.id) + book.trash.map { $0.note.id })
         var next = book
+        let newIDs = Set(primaryIDs.map { $0.uuidString }).subtracting(known.map { $0.uuidString })
+        next.ropePositions = (next.ropePositions ?? [:]).merging((incoming.ropePositions ?? [:]).filter { newIDs.contains($0.key) }) { old, _ in old }
         next.notes += incoming.notes.filter { !known.contains($0.id) }
         next.drafts += incoming.drafts.filter { !known.contains($0.id) }
         next.trash += incoming.trash.filter { !known.contains($0.note.id) }
@@ -130,7 +134,7 @@ final class Store: ObservableObject {
         next.notes.insert(item.note, at: min(item.index, next.notes.count))
         let ok = commit(next); if ok { message = L("便笺已找回") }; return ok
     }
-    @discardableResult func place(_ id: UUID, before target: UUID?) -> Bool {
+    @discardableResult func place(_ id: UUID, before target: UUID?, positions: [String: Double]? = nil) -> Bool {
         guard target != id else { return true }
         var next = book
         guard let from = next.notes.firstIndex(where: { $0.id == id }),
@@ -139,17 +143,22 @@ final class Store: ObservableObject {
         let note = next.notes.remove(at: from)
         let index = target.flatMap { target in next.notes.firstIndex(where: { $0.id == target }) } ?? next.notes.endIndex
         next.notes.insert(note, at: index)
-        if next.notes == book.notes { return true }
+        if let positions = positions { next.ropePositions = (next.ropePositions ?? [:]).merging(positions) { _, new in new } }
+        if next.notes == book.notes && next.ropePositions == book.ropePositions { return true }
+        let oldPositions = book.ropePositions
         guard commit(next) else { return false }
         previousOrder = previous
+        previousPositions = oldPositions
         return true
     }
     @discardableResult func move(_ id: UUID, to target: UUID) -> Bool {
         var next = book
         guard let from = next.notes.firstIndex(where: {$0.id == id}), let to = next.notes.firstIndex(where: {$0.id == target}), from != to else { return false }
         let before = next.notes
+        let oldPositions = book.ropePositions
+        next.ropePositions = nil
         next.notes.insert(next.notes.remove(at: from), at: to)
-        let ok = commit(next); if ok { previousOrder = before; message = L("顺序已调整") }; return ok
+        let ok = commit(next); if ok { previousOrder = before; previousPositions = oldPositions; message = L("顺序已调整") }; return ok
     }
     @discardableResult func undoOrder() -> Bool {
         guard let order = previousOrder else { return false }
@@ -157,6 +166,7 @@ final class Store: ObservableObject {
         let byID = Dictionary(uniqueKeysWithValues: next.notes.map { ($0.id, $0) })
         let ids = Set(order.map(\.id))
         next.notes = order.compactMap { byID[$0.id] } + next.notes.filter { !ids.contains($0.id) }
+        next.ropePositions = previousPositions
         let ok = commit(next); if ok { previousOrder = nil; message = L("已撤销排序") }; return ok
     }
 }

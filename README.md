@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.11.1"><img src="https://img.shields.io/badge/version-0.11.1-e5b85b" alt="0.11.1"></a>
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.12.0"><img src="https://img.shields.io/badge/version-0.12.0-e5b85b" alt="0.12.0"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13+ build target">
   <img src="https://img.shields.io/badge/Apple%20Silicon%20%2B%20Intel-arm64%20%7C%20x86__64-555555" alt="Apple Silicon + Intel">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
@@ -53,7 +53,7 @@ A real screenshot with four quick-start notes. From left to right:
 
 | | What String Notes offers |
 | --- | --- |
-| **Keep it in sight** | Colorful notes on a transparent string. Drag a note or clip to reorder it, pull it down to open a window, then drag the window back to hang it up. Empty overlay areas let clicks pass through. |
+| **Keep it in sight** | Colorful notes on a transparent string. Drag a note or clip to position it freely, pull it down to open a window, then drag the window back to hang it up. Empty overlay areas let clicks pass through. |
 | **Catch a thought** | Open notes from the menu bar or a global shortcut. Changes save automatically, with multiple note windows and individual always-on-top controls. |
 | **Make yourself at home** | Native text editing, find, undo and redo, adjustable fonts and sizes, and common Markdown formatting. |
 | **Add more than words** | Paste or insert images. Drag their corner handles to resize them; each image remembers its own size. |
@@ -66,11 +66,11 @@ Available for **Apple Silicon (M-series)** and **Intel Macs**, with a minimum bu
 
 ### Download DMG
 
-1. Download the DMG for your Mac: [Apple Silicon](https://github.com/TD21forever/string-notes/releases/download/v0.11.1/StringNotes-0.11.1-arm64.dmg) or [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.11.1/StringNotes-0.11.1-x86_64.dmg).
+1. Download the DMG for your Mac: [Apple Silicon](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-arm64.dmg) or [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-x86_64.dmg).
 2. Open the disk image and drag **绳上便笺.app** to **Applications**.
 3. Open the app from Applications. When upgrading, quit the old app before replacing it. Your existing notes stay on this Mac.
 
-Prefer a ZIP? Download [StringNotes-0.11.1-arm64.zip](https://github.com/TD21forever/string-notes/releases/download/v0.11.1/StringNotes-0.11.1-arm64.zip), unzip it, and move the app to Applications. An [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.11.1/StringNotes-0.11.1-x86_64.zip) is also available. Both formats contain the same app. SHA-256 checksum files are available on the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.11.1).
+Prefer a ZIP? Download [StringNotes-0.12.0-arm64.zip](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-arm64.zip), unzip it, and move the app to Applications. An [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-x86_64.zip) is also available. Both formats contain the same app. SHA-256 checksum files are available on the [release page](https://github.com/TD21forever/string-notes/releases/tag/v0.12.0).
 
 ### Homebrew
 
@@ -80,7 +80,7 @@ brew install --cask TD21forever/tap/string-notes
 
 ### If macOS blocks the first launch
 
-This preview is ad-hoc signed, without a Developer ID signature or Apple notarization. **DMG, ZIP, and Homebrew installations may all require manual approval.**
+This release is ad-hoc signed, without a Developer ID signature or Apple notarization. **DMG, ZIP, and Homebrew installations may all require manual approval.**
 
 If you downloaded the app from this project's release page and trust it:
 
@@ -118,6 +118,13 @@ A normal uninstall keeps your local notes. The cask does not define a `zap` acti
 4. **Archive what is done.** Archive a note, then find it in the library (**所有便笺**) whenever you want to read it or hang it back on the string.
 
 Right-click the menu bar icon to open the library, settings (**设置**), or quit the app.
+
+In **Settings → General**:
+
+- **String display**: follow the pointer when revealing the string or returning a note, use the main display, or select a specific display. A disconnected display temporarily falls back to the main display; the string returns when it reconnects.
+- **Auto-hide string**: turn off to keep the string visible. The menu bar icon and shortcut still let you hide it manually.
+
+Dragging along the string keeps your drop position instead of snapping to fixed slots, with nearby cards making room. Positions adapt to the display width. Scroll to reach overflowing notes, or drag near either end to scroll. Backups include positions; **Undo Last Reorder** in the menu bar menu also undoes the last placement.
 
 <details>
 <summary>Keyboard shortcuts</summary>
@@ -173,7 +180,7 @@ Importing a backup merges new notes. When an ID already exists, the local versio
 
 ## Preview status and feedback
 
-This is the **0.11.1**. Isolated tests cover storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
+Current version: **0.12.0**. Isolated tests cover display selection and disconnected-display fallback, free placement and undo, auto-hide behavior, storage, backup merging, corrupt-data protection, image persistence and resizing, Markdown, reorder data logic, and multiple editing sessions. Native window checks passed on a single display. Physical external-display unplug/reconnect testing remains outstanding; UI behavior still needs broader testing across macOS versions, displays, Chinese input methods, and Spaces.
 
 The library now has only Notes and Archive. Draft recovery is merged into the note list; there is no separate Drafts or Trash tab. Deleted records remain in local storage and backups, but there is currently no restore action in the UI. Archive notes you may want to revisit.
 
@@ -208,7 +215,7 @@ The app is written to `build/`; release files are written to `dist/`. [VERSION](
 
 The default build is `arm64`. Use `STRING_NOTES_ARCH=x86_64 ./scripts/package.sh` for Intel, then `STRING_NOTES_ARCH=x86_64 ./scripts/package-dmg.sh` for its DMG. Homebrew selects the matching architecture automatically. After changing the icons, run `./scripts/build-icons.sh` to regenerate the icon resources.
 
-GitHub Actions runs the isolated tests and packages the app. Pushing a `v*` tag that matches `VERSION` creates a preview release. Update the version and checksum in the [Homebrew tap](https://github.com/TD21forever/homebrew-tap) after publishing.
+GitHub Actions runs the isolated tests and packages the app. Pushing a `v*` tag that matches `VERSION` creates a Latest release. Update the version and checksum in the [Homebrew tap](https://github.com/TD21forever/homebrew-tap) after publishing.
 
 </details>
 

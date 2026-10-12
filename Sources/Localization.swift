@@ -11,6 +11,18 @@ enum AppLanguage {
         language == "en" ? (english[key] ?? key) : key
     }
     static let english: [String: String] = [
+        "绳子所在的显示器": "String display",
+        "显示位置": "Show on",
+        "跟随鼠标": "Follow pointer",
+        "主显示器": "Main display",
+        "指定显示器": "Selected display",
+        "%@（未连接）": "%@ (disconnected)",
+        "跟随鼠标仅在展开或拖回便笺时换屏。指定屏幕断开后暂用主显示器，重连后自动回到原屏幕。": "Follow pointer switches displays when revealing the string or returning a note. If a selected display disconnects, the string temporarily uses the main display and returns when reconnected.",
+        "自动收起绳子": "Auto-hide string",
+        "关闭后绳子保持显示；仍可点击菜单栏图标手动收起。": "Turn off to keep the string visible. You can still hide it manually with the menu bar icon.",
+        "向下拖取下，沿绳拖动摆放": "Pull down to detach; drag along the string to position",
+        "点击打开；向下拖取下，沿绳拖动摆放": "Click to open; pull down to detach, or drag along the string to position",
+
         "Markdown 即时排版": "Live Markdown formatting",
         "[图片]": "[Image]",
         "从备份恢复": "Import backup",

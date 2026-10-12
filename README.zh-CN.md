@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.11.1"><img src="https://img.shields.io/badge/version-0.11.1-e5b85b" alt="0.11.1"></a>
+  <a href="https://github.com/TD21forever/string-notes/releases/tag/v0.12.0"><img src="https://img.shields.io/badge/version-0.12.0-e5b85b" alt="0.12.0"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-555555" alt="macOS 13 及以上构建目标">
   <img src="https://img.shields.io/badge/Apple%20Silicon%20%2B%20Intel-arm64%20%7C%20x86__64-555555" alt="Apple Silicon + Intel">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7d9575" alt="MIT License"></a>
@@ -51,7 +51,7 @@
 
 | | 绳上便笺可以做什么 |
 | --- | --- |
-| **留在眼前** | 彩色纸条挂在透明绳子上，沿绳拖动可排序，向下拖动可取下，再拖回绳上挂好；悬浮层空白区域不阻挡下方应用。 |
+| **留在眼前** | 彩色纸条挂在透明绳子上，沿绳拖动可自由摆放并记住位置，向下拖动可取下，再拖回绳上挂好；悬浮层空白区域不阻挡下方应用。 |
 | **随手记下** | 菜单栏或全局快捷键打开便笺，输入后自动保存；支持同时打开多张便笺和单张置顶。 |
 | **写得顺手** | 原生文本编辑、查找、撤销和重做，字体与字号可调；支持常用 Markdown 排版。 |
 | **不只文字** | 粘贴或插入图片，拖动角点调整尺寸，每张图片的尺寸单独保存。 |
@@ -64,11 +64,11 @@
 
 ### 下载 DMG
 
-1. 根据芯片下载 DMG：[Apple Silicon（M 系列）](https://github.com/TD21forever/string-notes/releases/download/v0.11.1/StringNotes-0.11.1-arm64.dmg) 或 [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.11.1/StringNotes-0.11.1-x86_64.dmg)。
+1. 根据芯片下载 DMG：[Apple Silicon（M 系列）](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-arm64.dmg) 或 [Intel](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-x86_64.dmg)。
 2. 打开磁盘映像，将 **绳上便笺.app** 拖到 **Applications（应用程序）**。
 3. 从「应用程序」打开。升级时请先退出旧版，再替换应用；已有便笺会保留。
 
-也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.11.1/StringNotes-0.11.1-arm64.zip)，解压后将应用移到「应用程序」。另提供 [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.11.1/StringNotes-0.11.1-x86_64.zip)。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.11.1)同时提供 SHA-256 校验文件。
+也可下载 [ZIP 安装包](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-arm64.zip)，解压后将应用移到「应用程序」。另提供 [Intel ZIP](https://github.com/TD21forever/string-notes/releases/download/v0.12.0/StringNotes-0.12.0-x86_64.zip)。DMG 和 ZIP 包含相同的应用，[发布页](https://github.com/TD21forever/string-notes/releases/tag/v0.12.0)同时提供 SHA-256 校验文件。
 
 ### Homebrew
 
@@ -78,7 +78,7 @@ brew install --cask TD21forever/tap/string-notes
 
 ### 首次打开被 macOS 拦截怎么办？
 
-当前预览版使用临时签名，尚未取得 Developer ID 签名和 Apple 公证。**无论通过 DMG、ZIP 还是 Homebrew 安装，都可能需要手动放行。**
+当前版本使用临时签名，尚未取得 Developer ID 签名和 Apple 公证。**无论通过 DMG、ZIP 还是 Homebrew 安装，都可能需要手动放行。**
 
 确认应用来自本项目发布页且你信任它后：
 
@@ -112,10 +112,17 @@ brew uninstall --cask string-notes
 
 1. **展开绳子**：点击菜单栏的纸条图标，或将鼠标停在菜单栏片刻。
 2. **挂一张便笺**：点击绳子旁的「＋」，写下内容；输入后自动保存。
-3. **摆到顺手的位置**：点纸条编辑，沿绳拖动可排序；向下拖动便笺可取下，在独立窗口中编辑。拖窗口顶部空白区域回到绳子上即可挂回，关闭取下的窗口也会回到绳上。编辑窗口可以单独置顶。
+3. **摆到顺手的位置**：点纸条编辑，沿绳拖动可自由摆放并记住位置；向下拖动便笺可取下，在独立窗口中编辑。拖窗口顶部空白区域回到绳子上即可挂回，关闭取下的窗口也会回到绳上。编辑窗口可以单独置顶。
 4. **收好已完成的事**：将便笺归档，以后可在「所有便笺」里搜索、查看或挂回绳上。
 
 右键点击菜单栏图标，可以打开所有便笺、设置或退出应用。
+
+在「设置 → 通用」中：
+
+- **绳子所在的显示器**：默认跟随鼠标，在展开或拖回便笺时选择鼠标所在屏幕；也可选择主显示器或固定某一台显示器。固定屏幕断开后暂用主显示器，重连后自动回到原屏幕。
+- **自动收起绳子**：关闭后绳子持续显示，仍可点击菜单栏图标或用快捷键手动收起。
+
+沿绳拖动时，落点不再吸附到固定格子，附近卡片会让位。位置会随显示器宽度调整；卡片较多时可滚动查看，拖到两端也会滚动。摆放位置包含在备份中，可通过菜单栏的「撤销上次排序」撤销最近一次摆放。
 
 <details>
 <summary>快捷键</summary>
@@ -171,7 +178,7 @@ brew uninstall --cask string-notes
 
 ## 测试版与反馈
 
-目前是 **0.11.1**。存储、备份合并、损坏数据保护、图片持久化与缩放、Markdown、排序数据逻辑和多编辑会话已有隔离测试；不同 macOS、显示器、中文输入法和 Space 下的界面体验仍需继续验证。
+目前是 **0.12.0**。显示器选择与断开回退、自由摆放与撤销、自动收起策略、存储、备份合并、损坏数据保护、图片持久化与缩放、Markdown、排序数据逻辑和多编辑会话已有隔离测试；单屏原生窗口检查通过，真实外接屏插拔尚未实测；不同 macOS、显示器、中文输入法和 Space 下的界面体验仍需继续验证。
 
 便笺盒现仅保留便笺和归档，恢复草稿合并展示在便笺列表，不再单列草稿或回收站。删除记录仍保存在本地数据和备份中，但当前界面没有恢复入口；可能还会用到的便笺建议归档。
 
@@ -208,7 +215,7 @@ python3 tests/check-store.py
 
 默认构建 `arm64`。执行 `STRING_NOTES_ARCH=x86_64 ./scripts/package.sh` 生成 Intel ZIP，再执行 `STRING_NOTES_ARCH=x86_64 ./scripts/package-dmg.sh` 生成对应 DMG。Homebrew 会自动选择匹配芯片的版本。修改图标后可运行 `./scripts/build-icons.sh` 重新生成图标资源。
 
-GitHub Actions 会执行隔离测试和打包。推送与 `VERSION` 匹配的 `v*` 标签会生成测试版 Release；发布后需同步更新 [Homebrew Tap](https://github.com/TD21forever/homebrew-tap) 的版本与校验和。
+GitHub Actions 会执行隔离测试和打包。推送与 `VERSION` 匹配的 `v*` 标签会生成 Latest Release；发布后需同步更新 [Homebrew Tap](https://github.com/TD21forever/homebrew-tap) 的版本与校验和。
 
 </details>
 

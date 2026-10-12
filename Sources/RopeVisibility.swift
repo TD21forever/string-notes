@@ -6,9 +6,9 @@ struct RopeVisibilityPolicy {
     private var hoverSince: Date?
     private var cooldownUntil = Date.distantPast
 
-    mutating func hide(automatic: Bool, hasEditors: Bool, mousePressed: Bool, dragging: Bool, now: Date = Date()) -> Bool {
+    mutating func hide(automatic: Bool, hasEditors: Bool, mousePressed: Bool, dragging: Bool, autoHide: Bool = true, now: Date = Date()) -> Bool {
         guard !dragging else { return false }
-        if automatic && (hasEditors || mousePressed) { return false }
+        if automatic && (!autoHide || hasEditors || mousePressed) { return false }
         waitingForMenuBarExit = !automatic
         hoverSince = nil
         cooldownUntil = now.addingTimeInterval(0.7)
